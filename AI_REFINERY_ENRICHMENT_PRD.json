@@ -1,0 +1,366 @@
+{
+  "title": "AI Refinery Enrichment - Week 1 Foundation",
+  "epic": "Enterprise OpenClaw AI Refinery Integration",
+  "overview": "Enrich Enterprise OpenClaw with AI Refinery's open-source capabilities to create the most advanced enterprise AI platform. Week 1 focuses on foundational features: Distiller Framework, Agent Library, and Knowledge Graph with DRIFT RAG.",
+  "stories": [
+    {
+      "id": "US-001",
+      "title": "Implement Distiller-Compatible Orchestrator",
+      "description": "Create a production-grade orchestrator that can load and execute AI Refinery YAML configurations with intelligent routing and task decomposition",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Can parse AI Refinery YAML config files",
+        "Implements executor dictionary pattern",
+        "Routes queries to appropriate agents intelligently",
+        "Supports task decomposition for complex queries",
+        "Validates configuration schemas",
+        "Memory context management (date, env_variable, chat_history)",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 1,
+      "estimatedComplexity": "high",
+      "technical_notes": {
+        "files_to_create": [
+          "src/orchestrator/distiller-orchestrator.ts",
+          "src/orchestrator/yaml-config-loader.ts",
+          "src/orchestrator/task-decomposer.ts",
+          "src/orchestrator/intelligent-router.ts"
+        ],
+        "dependencies": ["yaml", "zod for validation"],
+        "reference": "AI Refinery Distiller Framework architecture"
+      }
+    },
+    {
+      "id": "US-002",
+      "title": "Implement SearchAgent Utility",
+      "description": "Create SearchAgent that performs web searches and returns formatted results",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Integrates with web search API (Google, Bing, or DuckDuckGo)",
+        "Returns structured search results",
+        "Implements self-reflection capability",
+        "Follows AI Refinery agent interface pattern",
+        "Error handling for API failures",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 2,
+      "estimatedComplexity": "medium",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/agent-library/utility-agents/search-agent.ts",
+          "extensions/agent-library/utility-agents/search-agent.test.ts"
+        ],
+        "api_options": ["Google Custom Search", "Brave Search", "DuckDuckGo"],
+        "interface": "Follows AI Refinery Agent interface with execute() and selfReflect()"
+      }
+    },
+    {
+      "id": "US-003",
+      "title": "Implement ResearchAgent with Compression and Reranking",
+      "description": "Create ResearchAgent that performs deep research using document compression (LLMLingua) and reranking for quality results",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Searches and retrieves relevant documents",
+        "Compresses documents using LLMLingua or similar",
+        "Reranks results based on relevance",
+        "Synthesizes final research response",
+        "Implements self-reflection",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 2,
+      "estimatedComplexity": "high",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/agent-library/utility-agents/research-agent.ts",
+          "extensions/agent-library/utility-agents/research-agent.test.ts",
+          "extensions/agent-library/utils/compression.ts",
+          "extensions/agent-library/utils/reranker.ts"
+        ],
+        "algorithms": ["LLMLingua for compression", "NVIDIA reranker or cross-encoder"],
+        "workflow": "Search → Compress → Rerank → Synthesize"
+      }
+    },
+    {
+      "id": "US-004",
+      "title": "Implement AnalyticsAgent for Data Analysis",
+      "description": "Create AnalyticsAgent that can analyze data, generate insights, and create visualizations",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Accepts data in JSON, CSV formats",
+        "Performs statistical analysis",
+        "Generates insights and recommendations",
+        "Can create simple visualizations (optional)",
+        "Implements self-reflection",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 2,
+      "estimatedComplexity": "medium",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/agent-library/utility-agents/analytics-agent.ts",
+          "extensions/agent-library/utility-agents/analytics-agent.test.ts"
+        ],
+        "libraries": ["simple-statistics", "d3 for visualization (optional)"],
+        "capabilities": ["Mean, median, mode", "Correlation", "Trend analysis"]
+      }
+    },
+    {
+      "id": "US-005",
+      "title": "Implement PlanningAgent for Task Planning",
+      "description": "Create PlanningAgent that breaks down complex tasks into actionable steps with dependencies",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Analyzes task complexity",
+        "Generates step-by-step plans",
+        "Identifies task dependencies",
+        "Creates DAG workflow representation",
+        "Implements self-reflection",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 2,
+      "estimatedComplexity": "medium",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/agent-library/utility-agents/planning-agent.ts",
+          "extensions/agent-library/utility-agents/planning-agent.test.ts"
+        ],
+        "output_format": "DAG with nodes and edges",
+        "features": ["Dependency detection", "Time estimation", "Resource allocation"]
+      }
+    },
+    {
+      "id": "US-006",
+      "title": "Implement BaseSuperAgent for Multi-Agent Coordination",
+      "description": "Create BaseSuperAgent that can orchestrate multiple utility agents to accomplish complex goals",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Decomposes complex tasks into subtasks",
+        "Routes subtasks to appropriate utility agents",
+        "Aggregates results from multiple agents",
+        "Handles agent failures gracefully",
+        "Supports max_turns configuration",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 3,
+      "estimatedComplexity": "high",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/agent-library/super-agents/base-super-agent.ts",
+          "extensions/agent-library/super-agents/base-super-agent.test.ts"
+        ],
+        "orchestration": "Manages agent lifecycle and communication",
+        "pattern": "Follows AI Refinery super agent architecture"
+      }
+    },
+    {
+      "id": "US-007",
+      "title": "Implement Knowledge Graph Foundation with LanceDB",
+      "description": "Create knowledge graph infrastructure using LanceDB for vector storage and graph traversal",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Initializes LanceDB vector database",
+        "Defines node and edge data structures",
+        "Implements add/update/delete operations",
+        "Supports vector embeddings for nodes",
+        "Graph traversal algorithms (BFS, DFS)",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 3,
+      "estimatedComplexity": "high",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/knowledge-system/knowledge-graph.ts",
+          "extensions/knowledge-system/knowledge-graph.test.ts",
+          "extensions/knowledge-system/vector-store.ts"
+        ],
+        "database": "LanceDB for vector storage",
+        "schema": "Nodes (id, content, embedding, metadata), Edges (source, target, type, weight)"
+      }
+    },
+    {
+      "id": "US-008",
+      "title": "Implement Basic RAG Query Mode",
+      "description": "Implement basic RAG (Retrieval-Augmented Generation) using vector similarity search",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Vector similarity search on knowledge graph",
+        "Returns top-k most relevant nodes",
+        "Generates embeddings for queries",
+        "Integrates with LLM for response generation",
+        "Configurable similarity threshold",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 3,
+      "estimatedComplexity": "medium",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/knowledge-system/rag-modes/basic-rag.ts",
+          "extensions/knowledge-system/rag-modes/basic-rag.test.ts"
+        ],
+        "algorithm": "Cosine similarity on embeddings",
+        "embedding_model": "Use Qwen3-Embedding or OpenAI embeddings"
+      }
+    },
+    {
+      "id": "US-009",
+      "title": "Implement DRIFT RAG Algorithm",
+      "description": "Implement DRIFT (Dynamic Reasoning and Inference with Flexible Traversal) for advanced knowledge retrieval",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Identifies entry points in knowledge graph",
+        "Dynamic graph traversal with reasoning",
+        "Flexible direction traversal (forward/backward)",
+        "Inference reasoning to fill knowledge gaps",
+        "Aggregates and ranks multiple paths",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 4,
+      "estimatedComplexity": "very_high",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/knowledge-system/rag-modes/drift-rag.ts",
+          "extensions/knowledge-system/rag-modes/drift-rag.test.ts",
+          "extensions/knowledge-system/inference-engine.ts"
+        ],
+        "algorithm": "Entry point detection → Dynamic traversal → Inference → Aggregation",
+        "unique_feature": "Uses LLM to infer missing connections and fill knowledge gaps"
+      }
+    },
+    {
+      "id": "US-010",
+      "title": "Implement Document Processing Pipeline",
+      "description": "Create document processing pipeline for PDF, DOCX, PPTX, and other formats to extract text and populate knowledge graph",
+      "acceptanceCriteria": [
+        "Tests written FIRST (RED phase)",
+        "Supports PDF, DOCX, PPTX, TXT formats",
+        "Extracts text content accurately",
+        "Handles images and tables (basic support)",
+        "Chunks documents for embedding",
+        "Populates knowledge graph with extracted content",
+        "All tests pass with 80%+ coverage"
+      ],
+      "priority": 4,
+      "estimatedComplexity": "medium",
+      "technical_notes": {
+        "files_to_create": [
+          "extensions/knowledge-system/document-processor.ts",
+          "extensions/knowledge-system/document-processor.test.ts",
+          "extensions/knowledge-system/chunking.ts"
+        ],
+        "libraries": ["pdf-parse", "mammoth (DOCX)", "pptx-parser"],
+        "chunking": "Semantic chunking with overlap for context preservation"
+      }
+    }
+  ],
+  "technical_architecture": {
+    "components": [
+      "Distiller Orchestrator",
+      "Agent Library (15+ agents)",
+      "Knowledge System (Graph + RAG)",
+      "Document Processing Pipeline"
+    ],
+    "data_flow": "User Query → Distiller → Agent Selection → Execution → Knowledge Retrieval (optional) → Response",
+    "integration_points": [
+      "OpenClaw Gateway",
+      "Existing Claude/Ollama Bridges",
+      "LanceDB Vector Store",
+      "External Search APIs"
+    ],
+    "patterns": [
+      "Executor Dictionary Pattern",
+      "YAML Configuration",
+      "Self-Reflection",
+      "DAG Workflows"
+    ]
+  },
+  "testing_strategy": {
+    "approach": "Reality-Grounded Test Driven Development (RG-TDD)",
+    "unit_tests": [
+      "All agent execute() methods",
+      "Orchestrator routing logic",
+      "Knowledge graph operations",
+      "RAG query modes",
+      "Document processing"
+    ],
+    "integration_tests": [
+      "End-to-end agent execution",
+      "Multi-agent orchestration",
+      "Knowledge retrieval with RAG",
+      "Document ingestion pipeline"
+    ],
+    "coverage_requirements": {
+      "minimum": 80,
+      "target": 90
+    },
+    "quality_gates": [
+      "All tests pass",
+      "TypeScript type checking",
+      "ESLint passing",
+      "No security vulnerabilities"
+    ]
+  },
+  "dependencies": {
+    "new": [
+      "yaml",
+      "zod",
+      "lancedb",
+      "pdf-parse",
+      "mammoth",
+      "simple-statistics"
+    ],
+    "existing": [
+      "@anthropic-ai/sdk",
+      "ollama"
+    ]
+  },
+  "success_criteria": {
+    "technical": [
+      "Distiller orchestrator can execute AI Refinery YAML configs",
+      "All 10 user stories implemented with tests",
+      "DRIFT RAG demonstrably better than basic RAG",
+      "Document processing working for PDF/DOCX/PPTX",
+      "80%+ test coverage across all new code"
+    ],
+    "business": [
+      "Can execute complex multi-agent workflows",
+      "Knowledge graph enables intelligent retrieval",
+      "Platform capabilities match AI Refinery foundation"
+    ]
+  },
+  "timeline": {
+    "total_effort": "5 days (Week 1)",
+    "story_breakdown": {
+      "day_1": ["US-001"],
+      "day_2": ["US-001 cont.", "US-002"],
+      "day_3": ["US-003", "US-004", "US-005"],
+      "day_4": ["US-006"],
+      "day_5": ["US-007", "US-008", "US-009", "US-010"]
+    }
+  },
+  "risk_management": {
+    "risks": [
+      {
+        "risk": "DRIFT algorithm complexity",
+        "mitigation": "Start with simpler version, iterate to full implementation",
+        "severity": "medium"
+      },
+      {
+        "risk": "LanceDB integration challenges",
+        "mitigation": "Use comprehensive documentation and examples",
+        "severity": "low"
+      },
+      {
+        "risk": "Agent coordination complexity",
+        "mitigation": "Modular design, test each agent independently first",
+        "severity": "medium"
+      }
+    ]
+  },
+  "documentation_requirements": [
+    "API documentation for all agents",
+    "YAML configuration examples",
+    "Knowledge graph schema documentation",
+    "RAG mode comparison guide",
+    "Integration guide with existing OpenClaw"
+  ]
+}
