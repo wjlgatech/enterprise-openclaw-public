@@ -1,0 +1,139 @@
+name: Dual Publish (Public + Private)
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  publish-public:
+    name: Publish Core to Public Repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Prepare public release
+        run: |
+          mkdir -p /tmp/public-release/packages
+
+          # Copy core package
+          cp -r packages/core /tmp/public-release/packages/
+
+          # Copy configuration
+          cp package.json tsconfig.base.json /tmp/public-release/
+          [ -f vitest.config.base.ts ] && cp vitest.config.base.ts /tmp/public-release/
+
+          # Copy server and public UI
+          [ -f server.ts ] && cp server.ts /tmp/public-release/
+          [ -d public ] && cp -r public /tmp/public-release/
+
+          # Copy documentation
+          [ -f README.md ] && cp README.md /tmp/public-release/
+          [ -f LICENSE ] && cp LICENSE /tmp/public-release/
+          [ -f CONTRIBUTING.md ] && cp CONTRIBUTING.md /tmp/public-release/
+          [ -f CODE_OF_CONDUCT.md ] && cp CODE_OF_CONDUCT.md /tmp/public-release/
+          [ -d docs ] && cp -r docs /tmp/public-release/
+          [ -d examples ] && cp -r examples /tmp/public-release/
+
+      - name: Modify package.json for public
+        working-directory: /tmp/public-release
+        run: |
+          # Update package.json to only include core workspace
+          cat package.json | \
+            jq '.workspaces = ["packages/core"] |
+                .name = "enterprise-openclaw" |
+                .description = "GenAI-native multi-agent platform - Open Source Core"' \
+            > package.json.tmp
+          mv package.json.tmp package.json
+
+      - name: Create .gitignore
+        working-directory: /tmp/public-release
+        run: |
+          cat > .gitignore << 'EOF'
+          node_modules/
+          dist/
+          *.tsbuildinfo
+          coverage/
+          .env
+          .env.local
+          .vscode/
+          .idea/
+          .DS_Store
+          data/
+          *.log
+          EOF
+
+      - name: Initialize git and commit
+        working-directory: /tmp/public-release
+        run: |
+          git init
+          git config user.name "Enterprise OpenClaw Bot"
+          git config user.email "bot@enterprise-openclaw.com"
+          git checkout -b main
+          git add .
+          git commit -m "Release: $(date '+%Y-%m-%d %H:%M:%S') - Core package only"
+
+      - name: Push to public repository
+        working-directory: /tmp/public-release
+        run: |
+          # Configure git credentials
+          git remote add public https://x-access-token:${{ secrets.PUBLIC_REPO_TOKEN }}@github.com/${{ github.repository_owner }}/enterprise-openclaw.git
+
+          # Force push to public repo
+          git push -f public main
+
+      - name: Publish to npm (on release only)
+        if: github.event_name == 'release'
+        working-directory: /tmp/public-release
+        run: |
+          npm install
+          npm run build
+          npm publish --access public -w @enterprise-openclaw/core
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-private:
+    name: Publish Full to Private Repo
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to private repository
+        run: |
+          # Configure git credentials
+          git remote add private https://x-access-token:${{ secrets.PRIVATE_REPO_TOKEN }}@github.com/${{ github.repository_owner }}/enterprise-openclaw-enterprise.git
+
+          # Push current branch to main in private repo
+          git push -f private ${{ github.ref_name }}:main
+
+          # Push tags if any
+          git push private --tags || true
+
+      - name: Setup Node.js (on release only)
+        if: github.event_name == 'release'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@enterprise-openclaw'
+
+      - name: Publish to GitHub Packages (on release only)
+        if: github.event_name == 'release'
+        run: |
+          npm install
+          npm run build
+          npm publish -w @enterprise-openclaw/enterprise
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
