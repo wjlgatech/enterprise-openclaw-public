@@ -32,19 +32,33 @@ Perfect for building **intelligent assistants**, **automated workflows**, and **
 
 ## ⚡ Quick Start
 
-### One-Click Installation
+### One-Command Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wjlgatech/enterprise-openclaw/main/install.sh | bash
+# Clone and install everything automatically
+git clone https://github.com/wjlgatech/enterprise-openclaw.git && \
+cd enterprise-openclaw && \
+./install.sh
 ```
 
-**Or clone manually:**
+**Or step-by-step:**
 
 ```bash
 git clone https://github.com/wjlgatech/enterprise-openclaw.git
 cd enterprise-openclaw
-npm install && npm run build
+npm install && npm run build && npm test
 ```
+
+**Just want to try it?**
+
+```bash
+# Minimum to get started (no tests)
+git clone https://github.com/wjlgatech/enterprise-openclaw.git
+cd enterprise-openclaw && npm install && npm run build
+```
+
+> **Note:** For public repositories, you can also use:
+> `curl -fsSL https://raw.githubusercontent.com/wjlgatech/enterprise-openclaw/main/install.sh | bash`
 
 ### Your First Agent (30 seconds)
 
