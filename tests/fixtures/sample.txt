@@ -1,0 +1,8 @@
+This is a sample text document for testing the document processing pipeline.
+
+It contains multiple paragraphs to test text extraction and chunking functionality.
+
+The document processor should be able to handle plain text files easily.
+They are the simplest format and serve as a baseline for other formats.
+
+This paragraph contains some technical terms like "knowledge graph", "vector embeddings", and "semantic search" to test whether chunking preserves context properly.
