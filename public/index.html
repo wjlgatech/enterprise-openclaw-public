@@ -1,596 +1,787 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise OpenClaw - Chat</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise OpenClaw</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: #0d0d0d;
+      color: #e5e5e5;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-        .chat-container {
-            width: 90%;
-            max-width: 900px;
-            height: 90vh;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+    .container {
+      display: flex;
+      height: 100vh;
+    }
 
-        .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: #171717;
+      border-right: 1px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
 
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 600;
-        }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 24px;
+    }
 
-        .header-controls {
-            display: flex;
-            gap: 12px;
-        }
+    .logo-icon {
+      font-size: 28px;
+    }
 
-        .header-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .header-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
 
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: #f8f9fa;
-        }
+    .nav-item:hover {
+      background: #2a2a2a;
+      color: #e5e5e5;
+    }
 
-        .message {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-        }
+    .nav-item.active {
+      background: #2a2a2a;
+      color: #fff;
+    }
 
-        .message-user {
-            align-items: flex-end;
-        }
+    .nav-icon {
+      font-size: 18px;
+      width: 20px;
+    }
 
-        .message-ai {
-            align-items: flex-start;
-        }
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 16px 0;
+    }
 
-        .message-content {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            word-wrap: break-word;
-        }
+    .recents {
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 16px;
+    }
 
-        .message-user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+    .recents-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding: 0 16px;
+    }
 
-        .message-ai .message-content {
-            background: white;
-            border: 1px solid #e0e0e0;
-            color: #333;
-        }
+    .recent-item {
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.2s;
+    }
 
-        .message-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-            padding: 0 8px;
-        }
+    .recent-item:hover {
+      background: #2a2a2a;
+      color: #e5e5e5;
+    }
 
-        .message-meta {
-            font-size: 11px;
-            color: #999;
-            margin-top: 4px;
-            padding: 0 8px;
-        }
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d0d;
+    }
 
-        .welcome-screen {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #2a2a2a;
+    }
 
-        .welcome-screen h1 {
-            font-size: 32px;
-            color: #667eea;
-            margin-bottom: 16px;
-        }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-        .welcome-screen p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #1a3a1a;
+      border: 1px solid #2d5a2d;
+      border-radius: 6px;
+      font-size: 13px;
+    }
 
-        .welcome-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 32px 0;
-        }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
 
-        .feature-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
 
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
+    .stats {
+      display: flex;
+      gap: 24px;
+    }
 
-        .feature-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
 
-        .feature-desc {
-            font-size: 14px;
-            color: #666;
-        }
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
 
-        .quick-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 24px;
-        }
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+    }
 
-        .action-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: transform 0.2s;
-        }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
+    .model-selector {
+      padding: 8px 16px;
+      background: #1f1f1f;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: #e5e5e5;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-        .action-btn.secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
+    .model-selector:hover {
+      background: #2a2a2a;
+    }
 
-        .chat-input-area {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-        }
+    /* Content Area */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+    }
 
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
+    .welcome {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 60px 0;
+    }
 
-        .chat-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s;
-        }
+    .greeting {
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .chat-input:focus {
-            border-color: #667eea;
-        }
+    .subtext {
+      font-size: 18px;
+      color: #9ca3af;
+      margin-bottom: 48px;
+    }
 
-        .send-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: transform 0.2s;
-        }
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
 
-        .send-btn:hover {
-            transform: scale(1.05);
-        }
+    .action-card {
+      padding: 24px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    .action-card:hover {
+      background: #1f1f1f;
+      border-color: #3a3a3a;
+      transform: translateY(-2px);
+    }
 
-        .typing-indicator {
-            display: none;
-            padding: 12px 16px;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            width: fit-content;
-        }
+    .action-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
 
-        .typing-indicator.active {
-            display: block;
-        }
+    .action-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
 
-        .typing-dots {
-            display: flex;
-            gap: 4px;
-        }
+    .action-desc {
+      font-size: 13px;
+      color: #9ca3af;
+    }
 
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
+    /* Chat Area */
+    .chat-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-bottom: 120px;
+    }
 
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
+    .message {
+      margin-bottom: 24px;
+      animation: fadeIn 0.3s;
+    }
 
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-        code {
-            background: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
 
-        pre {
-            background: #f4f4f4;
-            padding: 12px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 8px 0;
-        }
+    .message-name {
+      font-weight: 600;
+      color: #fff;
+    }
 
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            background: #4caf50;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
+    .message-content {
+      padding: 16px 20px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      line-height: 1.6;
+      margin-left: 44px;
+    }
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-    </style>
+    .message.user .message-content {
+      background: #1f1f1f;
+    }
+
+    .message.assistant .message-avatar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* Input Area */
+    .input-container {
+      position: fixed;
+      bottom: 0;
+      left: 280px;
+      right: 0;
+      background: #0d0d0d;
+      border-top: 1px solid #2a2a2a;
+      padding: 24px 32px;
+    }
+
+    .input-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 16px 120px 16px 20px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      color: #e5e5e5;
+      font-size: 15px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-box:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .input-actions {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .input-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .input-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #2a2a2a;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Metrics Panel */
+    .metrics-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .metric-card {
+      padding: 24px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .metric-trend {
+      font-size: 13px;
+      color: #22c55e;
+    }
+
+    .metric-trend.down {
+      color: #ef4444;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #171717;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3a3a;
+    }
+
+    /* Code blocks */
+    pre {
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 13px;
+      color: #a5d6ff;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <div class="header-title">
-                <span>🦅</span>
-                <span>Enterprise OpenClaw</span>
-                <span class="status-indicator" title="Running locally"></span>
-            </div>
-            <div class="header-controls">
-                <button class="header-btn" onclick="showSettings()">⚙️ Settings</button>
-                <button class="header-btn" onclick="showStatus()">📊 Status</button>
-                <button class="header-btn" onclick="showHelp()">❓ Help</button>
-            </div>
-        </div>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🦅</div>
+        <div class="logo-text">Enterprise OpenClaw</div>
+      </div>
 
-        <div class="chat-messages" id="messages">
-            <div class="welcome-screen" id="welcome">
-                <h1>🦅 Welcome to Enterprise OpenClaw!</h1>
-                <p>Your AI assistant is ready. Everything is running 100% locally and privately.</p>
+      <div class="nav-item active" data-view="chat">
+        <span class="nav-icon">💬</span>
+        <span>New Task</span>
+      </div>
+      <div class="nav-item" data-view="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item" data-view="tasks">
+        <span class="nav-icon">📋</span>
+        <span>Tasks</span>
+      </div>
+      <div class="nav-item" data-view="agents">
+        <span class="nav-icon">🤖</span>
+        <span>Agents</span>
+      </div>
+      <div class="nav-item" data-view="improvements">
+        <span class="nav-icon">⚡</span>
+        <span>Improvements</span>
+      </div>
 
-                <div class="welcome-features">
-                    <div class="feature-card">
-                        <div class="feature-icon">✅</div>
-                        <div class="feature-title">Local AI</div>
-                        <div class="feature-desc">Running on your device, 100% private</div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
-                        <div class="feature-title">Secure</div>
-                        <div class="feature-desc">Enterprise-grade security enabled</div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🚀</div>
-                        <div class="feature-title">Ready</div>
-                        <div class="feature-desc">Start chatting immediately</div>
-                    </div>
-                </div>
+      <div class="divider"></div>
 
-                <p><strong>What would you like to do?</strong></p>
-
-                <div class="quick-actions">
-                    <button class="action-btn" onclick="startDemo()">Start Chatting</button>
-                    <button class="action-btn secondary" onclick="showTour()">Quick Tour</button>
-                    <button class="action-btn secondary" onclick="customize()">Customize Settings</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="chat-input-area">
-            <div class="input-wrapper">
-                <input
-                    type="text"
-                    class="chat-input"
-                    id="chatInput"
-                    placeholder="Type your message... (or try: 'help me set up Claude API')"
-                    onkeypress="handleKeyPress(event)"
-                />
-                <button class="send-btn" onclick="sendMessage()">Send</button>
-            </div>
-        </div>
+      <div class="recents">
+        <div class="recents-title">Recent Tasks</div>
+        <div id="recentsList"></div>
+      </div>
     </div>
 
-    <script>
-        const messagesDiv = document.getElementById('messages');
-        const chatInput = document.getElementById('chatInput');
-        const welcomeScreen = document.getElementById('welcome');
+    <!-- Main Content -->
+    <div class="main">
+      <div class="header">
+        <div class="header-left">
+          <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>System Healthy</span>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value" id="totalTasks">0</div>
+              <div class="stat-label">Tasks</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="successRate">0%</div>
+              <div class="stat-label">Success</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="totalCost">$0</div>
+              <div class="stat-label">Cost</div>
+            </div>
+          </div>
+        </div>
+        <div class="header-right">
+          <select class="model-selector" id="modelSelector">
+            <option value="code-generator">Code Generator</option>
+            <option value="analyzer">Analyzer</option>
+            <option value="knowledge-extractor">Knowledge Extractor</option>
+          </select>
+        </div>
+      </div>
 
-        let isFirstMessage = true;
+      <!-- Chat View -->
+      <div id="chatView" class="content">
+        <div class="welcome" id="welcomeScreen">
+          <div class="greeting">Welcome to Enterprise OpenClaw ✨</div>
+          <div class="subtext">Your AI assistant with conversational setup - no terminal needed!</div>
 
-        function addMessage(content, isUser = false, meta = '') {
-            if (isFirstMessage) {
-                welcomeScreen.style.display = 'none';
-                isFirstMessage = false;
-            }
+          <div class="quick-actions">
+            <div class="action-card" data-action="setup-claude">
+              <div class="action-icon">🔑</div>
+              <div class="action-title">Setup Claude API</div>
+              <div class="action-desc">Configure Claude through chat - no terminal!</div>
+            </div>
+            <div class="action-card" data-action="install-model">
+              <div class="action-icon">💻</div>
+              <div class="action-title">Install AI Model</div>
+              <div class="action-desc">Get local models conversationally</div>
+            </div>
+            <div class="action-card" data-action="status">
+              <div class="action-icon">📊</div>
+              <div class="action-title">System Status</div>
+              <div class="action-desc">Check system health & features</div>
+            </div>
+            <div class="action-card" data-action="configure">
+              <div class="action-icon">⚙️</div>
+              <div class="action-title">Configure Features</div>
+              <div class="action-desc">Set up everything through chat</div>
+            </div>
+          </div>
+        </div>
 
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message message-${isUser ? 'user' : 'ai'}`;
+        <div class="chat-container hidden" id="chatMessages"></div>
+      </div>
 
-            const label = document.createElement('div');
-            label.className = 'message-label';
-            label.textContent = isUser ? 'You' : 'AI Assistant';
+      <!-- Dashboard View -->
+      <div id="dashboardView" class="content hidden">
+        <div class="metrics-panel" id="metricsPanel"></div>
+        <div id="tasksTable"></div>
+      </div>
 
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.innerHTML = formatMessage(content);
+      <!-- Input -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <textarea
+            id="promptInput"
+            class="input-box"
+            placeholder="Ask anything or try: 'help me configure Claude API', 'install a model', 'system status'..."
+            rows="1"
+          ></textarea>
+          <div class="input-actions">
+            <button id="submitBtn" class="input-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            messageDiv.appendChild(label);
-            messageDiv.appendChild(contentDiv);
+  <script>
+    // State
+    let tasks = [];
+    let currentView = 'chat';
+    let ws = null;
 
-            if (meta) {
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'message-meta';
-                metaDiv.textContent = meta;
-                messageDiv.appendChild(metaDiv);
-            }
-
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    // Initialize WebSocket
+    function connectWebSocket() {
+      ws = new WebSocket('ws://localhost:8789');
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'task-event') {
+          handleTaskEvent(data.data);
         }
+      };
+    }
 
-        function formatMessage(text) {
-            // Simple markdown-like formatting
-            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-            text = text.replace(/\n/g, '<br>');
-            return text;
+    // Handle task events
+    function handleTaskEvent(event) {
+      console.log('Task event:', event);
+      if (event.type === 'task.completed') {
+        loadTasks();
+      }
+    }
+
+    // Load tasks - Using health endpoint for stats
+    async function loadTasks() {
+      try {
+        const health = await fetch('/api/health').then(r => r.json()).catch(() => ({ status: 'unknown' }));
+
+        // Update stats with system info
+        document.getElementById('totalTasks').textContent = '0';
+        document.getElementById('successRate').textContent = health.status === 'healthy' ? '100%' : '0%';
+        document.getElementById('totalCost').textContent = '$0.00';
+
+        // Update recents list
+        const recentsList = document.getElementById('recentsList');
+        recentsList.innerHTML = '<div class="recent-item">No recent tasks</div>';
+      } catch (error) {
+        console.error('Failed to load stats:', error);
+      }
+    }
+
+    // Send chat message to Enterprise OpenClaw
+    async function sendChatMessage(input) {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await response.json();
+      return data;
+    }
+
+    // Add message
+    function addMessage(role, content) {
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const chatMessages = document.getElementById('chatMessages');
+
+      welcomeScreen.classList.add('hidden');
+      chatMessages.classList.remove('hidden');
+
+      const messageEl = document.createElement('div');
+      messageEl.className = 'message ' + role;
+      messageEl.innerHTML = `
+        <div class="message-header">
+          <div class="message-avatar">${role === 'user' ? '👤' : '🦅'}</div>
+          <div class="message-name">${role === 'user' ? 'You' : 'Enterprise OpenClaw'}</div>
+        </div>
+        <div class="message-content">${formatContent(content)}</div>
+      `;
+
+      chatMessages.appendChild(messageEl);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Format content
+    function formatContent(content) {
+      // Simple markdown-like formatting
+      content = content.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+      content = content.replace(/\n/g, '<br>');
+      return content;
+    }
+
+    // Handle submit
+    async function handleSubmit() {
+      const input = document.getElementById('promptInput');
+      const submitBtn = document.getElementById('submitBtn');
+      const value = input.value.trim();
+
+      if (!value) return;
+
+      // Add user message
+      addMessage('user', value);
+      input.value = '';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loading"></div>';
+
+      try {
+        // Send to chat API with conversational setup features
+        const result = await sendChatMessage(value);
+
+        // Add assistant response
+        addMessage('assistant', result.response || 'No response');
+
+        // Update stats
+        await loadTasks();
+      } catch (error) {
+        console.error('Chat error:', error);
+        addMessage('assistant', 'Sorry, there was an error processing your request. Please try again.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send';
+      }
+    }
+
+    // Quick actions for conversational setup
+    document.querySelectorAll('.action-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const action = card.dataset.action;
+        const prompts = {
+          'setup-claude': 'help me configure Claude API',
+          'install-model': 'install a model',
+          'status': 'system status',
+          'configure': 'help me configure'
+        };
+        document.getElementById('promptInput').value = prompts[action];
+        document.getElementById('promptInput').focus();
+        handleSubmit();
+      });
+    });
+
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        if (view) {
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          document.getElementById('chatView').classList.toggle('hidden', view !== 'chat');
+          document.getElementById('dashboardView').classList.toggle('hidden', view !== 'dashboard');
         }
+      });
+    });
 
-        function showTyping() {
-            const typing = document.createElement('div');
-            typing.className = 'typing-indicator active';
-            typing.id = 'typing';
-            typing.innerHTML = `
-                <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
-            messagesDiv.appendChild(typing);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
+    // Submit handlers
+    document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+    document.getElementById('promptInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSubmit();
+      }
+    });
 
-        function hideTyping() {
-            const typing = document.getElementById('typing');
-            if (typing) typing.remove();
-        }
+    // Auto-resize textarea
+    document.getElementById('promptInput').addEventListener('input', (e) => {
+      e.target.style.height = 'auto';
+      e.target.style.height = e.target.scrollHeight + 'px';
+    });
 
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, true);
-            chatInput.value = '';
-
-            showTyping();
-
-            // Send to backend
-            try {
-                const response = await fetch('http://localhost:18789/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message })
-                });
-
-                const data = await response.json();
-                hideTyping();
-                addMessage(data.response, false, data.model || 'phi4 (local)');
-            } catch (error) {
-                hideTyping();
-                addMessage('Sorry, I encountered an error. Please try again.', false);
-                console.error('Error:', error);
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        function startDemo() {
-            welcomeScreen.style.display = 'none';
-            isFirstMessage = false;
-            addMessage(`Hi! I'm your AI assistant running locally on your machine.
-
-I can help you with:
-• Coding and programming
-• Writing and editing
-• Research and analysis
-• Configuration and setup
-
-**Everything stays 100% private on your device.**
-
-What would you like help with?`, false, 'phi4 (local)');
-        }
-
-        function showTour() {
-            welcomeScreen.style.display = 'none';
-            isFirstMessage = false;
-            addMessage(`Great! Let me show you around.
-
-**What is Enterprise OpenClaw?**
-It's an AI assistant platform that runs entirely on your computer. Your data never leaves your machine.
-
-**Key Features:**
-• **100% Local AI** - Powered by Ollama (phi4 model installed)
-• **No API Keys Needed** - Works out of the box
-• **Enterprise Security** - PII detection, audit logging
-• **Multi-Channel** - Chat here, Telegram, Discord, etc.
-
-**Want to:**
-1. Try asking me a question
-2. Add more AI models
-3. Connect messaging apps
-4. Customize settings
-
-Just tell me what you'd like to do!`, false, 'phi4 (local)');
-        }
-
-        function customize() {
-            welcomeScreen.style.display = 'none';
-            isFirstMessage = false;
-            addMessage(`I can help you customize Enterprise OpenClaw!
-
-**Popular customizations:**
-
-1. **Add Claude/GPT API** - Use cloud AI models
-2. **Install more models** - codellama, mistral, llama3.2
-3. **Connect Telegram/Discord** - Chat from your favorite apps
-4. **Privacy settings** - Already 100% local by default
-5. **Advanced features** - Multi-agent, workflows
-
-What would you like to configure?`, false, 'phi4 (local)');
-        }
-
-        function showSettings() {
-            alert('Settings UI coming soon! For now, ask me in chat:\n\n"I want to configure [feature]"');
-        }
-
-        function showStatus() {
-            addMessage('show me the system status', true);
-            setTimeout(() => {
-                addMessage(`**System Status**
-
-✅ Gateway: Running (Port 18789)
-✅ Ollama: Active (localhost:11434)
-✅ AI Model: phi4 (local)
-✅ Privacy: 100% Local Processing
-
-**Extensions:**
-• Claude Agent Bridge: Loaded
-• Ollama Bridge: Loaded
-
-**Channels:**
-• Chat UI: Active
-• Telegram: Not configured
-• Discord: Not configured
-
-Everything is running smoothly!`, false, 'System');
-            }, 300);
-        }
-
-        function showHelp() {
-            addMessage('help', true);
-            setTimeout(() => {
-                addMessage(`**Quick Help**
-
-**Common Commands:**
-• "install [model]" - Add new AI models
-• "add Claude API" - Configure cloud AI
-• "connect Telegram" - Setup messaging
-• "show status" - System information
-• "configure [feature]" - Change settings
-
-**Examples:**
-• "Write a Python function to sort a list"
-• "Explain quantum computing simply"
-• "Help me set up Claude API"
-• "Install codellama for better coding"
-
-Just ask naturally - I understand conversational requests!`, false, 'Help');
-            }, 300);
-        }
-
-        // Initialize
-        console.log('Enterprise OpenClaw Chat UI loaded');
-    </script>
+    // Initialize
+    connectWebSocket();
+    loadTasks();
+  </script>
 </body>
 </html>
