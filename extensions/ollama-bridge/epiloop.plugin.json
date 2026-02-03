@@ -1,0 +1,27 @@
+{
+  "id": "ollama-bridge",
+  "name": "Ollama Bridge",
+  "description": "Local LLM execution via Ollama - 100% on-device, no data leaves your machine",
+  "version": "1.0.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Enable Ollama Bridge",
+        "default": true
+      },
+      "host": {
+        "type": "string",
+        "description": "Ollama server URL",
+        "default": "http://localhost:11434"
+      },
+      "defaultModel": {
+        "type": "string",
+        "description": "Default model to use",
+        "default": "codellama:13b"
+      }
+    }
+  }
+}

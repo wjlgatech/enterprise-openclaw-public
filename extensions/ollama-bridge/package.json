@@ -1,0 +1,24 @@
+{
+  "name": "@enterprise-openclaw/ollama-bridge",
+  "version": "1.0.0",
+  "description": "Local Ollama LLM integration for Enterprise OpenClaw - NO DATA LEAVES YOUR MACHINE",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "epiloop": {
+    "extensions": ["./dist/extension.js"]
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "ollama": "^0.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["ollama", "local-llm", "privacy", "openclaw"],
+  "author": "Enterprise OpenClaw Team",
+  "license": "Apache-2.0"
+}

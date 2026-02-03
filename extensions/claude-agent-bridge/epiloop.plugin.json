@@ -1,0 +1,27 @@
+{
+  "id": "claude-agent-bridge",
+  "name": "Claude Agent Bridge",
+  "description": "Claude Agent SDK integration with extended thinking and artifact generation",
+  "version": "1.0.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Enable Claude Agent Bridge",
+        "default": true
+      },
+      "model": {
+        "type": "string",
+        "description": "Default Claude model to use",
+        "default": "claude-3-haiku-20240307"
+      },
+      "extendedThinking": {
+        "type": "boolean",
+        "description": "Enable extended thinking by default",
+        "default": false
+      }
+    }
+  }
+}

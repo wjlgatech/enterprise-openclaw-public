@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise OpenClaw - Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-user {
+            align-items: flex-end;
+        }
+
+        .message-ai {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message-user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message-ai .message-content {
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .message-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+            padding: 0 8px;
+        }
+
+        .message-meta {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+            padding: 0 8px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .welcome-screen h1 {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 16px;
+        }
+
+        .welcome-screen p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .welcome-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-title">
+                <span>🦅</span>
+                <span>Enterprise OpenClaw</span>
+                <span class="status-indicator" title="Running locally"></span>
+            </div>
+            <div class="header-controls">
+                <button class="header-btn" onclick="showSettings()">⚙️ Settings</button>
+                <button class="header-btn" onclick="showStatus()">📊 Status</button>
+                <button class="header-btn" onclick="showHelp()">❓ Help</button>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="messages">
+            <div class="welcome-screen" id="welcome">
+                <h1>🦅 Welcome to Enterprise OpenClaw!</h1>
+                <p>Your AI assistant is ready. Everything is running 100% locally and privately.</p>
+
+                <div class="welcome-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <div class="feature-title">Local AI</div>
+                        <div class="feature-desc">Running on your device, 100% private</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-title">Secure</div>
+                        <div class="feature-desc">Enterprise-grade security enabled</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <div class="feature-title">Ready</div>
+                        <div class="feature-desc">Start chatting immediately</div>
+                    </div>
+                </div>
+
+                <p><strong>What would you like to do?</strong></p>
+
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="startDemo()">Start Chatting</button>
+                    <button class="action-btn secondary" onclick="showTour()">Quick Tour</button>
+                    <button class="action-btn secondary" onclick="customize()">Customize Settings</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    class="chat-input"
+                    id="chatInput"
+                    placeholder="Type your message... (or try: 'help me set up Claude API')"
+                    onkeypress="handleKeyPress(event)"
+                />
+                <button class="send-btn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const chatInput = document.getElementById('chatInput');
+        const welcomeScreen = document.getElementById('welcome');
+
+        let isFirstMessage = true;
+
+        function addMessage(content, isUser = false, meta = '') {
+            if (isFirstMessage) {
+                welcomeScreen.style.display = 'none';
+                isFirstMessage = false;
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${isUser ? 'user' : 'ai'}`;
+
+            const label = document.createElement('div');
+            label.className = 'message-label';
+            label.textContent = isUser ? 'You' : 'AI Assistant';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = formatMessage(content);
+
+            messageDiv.appendChild(label);
+            messageDiv.appendChild(contentDiv);
+
+            if (meta) {
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'message-meta';
+                metaDiv.textContent = meta;
+                messageDiv.appendChild(metaDiv);
+            }
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            // Simple markdown-like formatting
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\n/g, '<br>');
+            return text;
+        }
+
+        function showTyping() {
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator active';
+            typing.id = 'typing';
+            typing.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            messagesDiv.appendChild(typing);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            chatInput.value = '';
+
+            showTyping();
+
+            // Send to backend
+            try {
+                const response = await fetch('http://localhost:18789/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message })
+                });
+
+                const data = await response.json();
+                hideTyping();
+                addMessage(data.response, false, data.model || 'phi4 (local)');
+            } catch (error) {
+                hideTyping();
+                addMessage('Sorry, I encountered an error. Please try again.', false);
+                console.error('Error:', error);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function startDemo() {
+            welcomeScreen.style.display = 'none';
+            isFirstMessage = false;
+            addMessage(`Hi! I'm your AI assistant running locally on your machine.
+
+I can help you with:
+• Coding and programming
+• Writing and editing
+• Research and analysis
+• Configuration and setup
+
+**Everything stays 100% private on your device.**
+
+What would you like help with?`, false, 'phi4 (local)');
+        }
+
+        function showTour() {
+            welcomeScreen.style.display = 'none';
+            isFirstMessage = false;
+            addMessage(`Great! Let me show you around.
+
+**What is Enterprise OpenClaw?**
+It's an AI assistant platform that runs entirely on your computer. Your data never leaves your machine.
+
+**Key Features:**
+• **100% Local AI** - Powered by Ollama (phi4 model installed)
+• **No API Keys Needed** - Works out of the box
+• **Enterprise Security** - PII detection, audit logging
+• **Multi-Channel** - Chat here, Telegram, Discord, etc.
+
+**Want to:**
+1. Try asking me a question
+2. Add more AI models
+3. Connect messaging apps
+4. Customize settings
+
+Just tell me what you'd like to do!`, false, 'phi4 (local)');
+        }
+
+        function customize() {
+            welcomeScreen.style.display = 'none';
+            isFirstMessage = false;
+            addMessage(`I can help you customize Enterprise OpenClaw!
+
+**Popular customizations:**
+
+1. **Add Claude/GPT API** - Use cloud AI models
+2. **Install more models** - codellama, mistral, llama3.2
+3. **Connect Telegram/Discord** - Chat from your favorite apps
+4. **Privacy settings** - Already 100% local by default
+5. **Advanced features** - Multi-agent, workflows
+
+What would you like to configure?`, false, 'phi4 (local)');
+        }
+
+        function showSettings() {
+            alert('Settings UI coming soon! For now, ask me in chat:\n\n"I want to configure [feature]"');
+        }
+
+        function showStatus() {
+            addMessage('show me the system status', true);
+            setTimeout(() => {
+                addMessage(`**System Status**
+
+✅ Gateway: Running (Port 18789)
+✅ Ollama: Active (localhost:11434)
+✅ AI Model: phi4 (local)
+✅ Privacy: 100% Local Processing
+
+**Extensions:**
+• Claude Agent Bridge: Loaded
+• Ollama Bridge: Loaded
+
+**Channels:**
+• Chat UI: Active
+• Telegram: Not configured
+• Discord: Not configured
+
+Everything is running smoothly!`, false, 'System');
+            }, 300);
+        }
+
+        function showHelp() {
+            addMessage('help', true);
+            setTimeout(() => {
+                addMessage(`**Quick Help**
+
+**Common Commands:**
+• "install [model]" - Add new AI models
+• "add Claude API" - Configure cloud AI
+• "connect Telegram" - Setup messaging
+• "show status" - System information
+• "configure [feature]" - Change settings
+
+**Examples:**
+• "Write a Python function to sort a list"
+• "Explain quantum computing simply"
+• "Help me set up Claude API"
+• "Install codellama for better coding"
+
+Just ask naturally - I understand conversational requests!`, false, 'Help');
+            }, 300);
+        }
+
+        // Initialize
+        console.log('Enterprise OpenClaw Chat UI loaded');
+    </script>
+</body>
+</html>

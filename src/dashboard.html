@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise OpenClaw</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: #0d0d0d;
+      color: #e5e5e5;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: #171717;
+      border-right: 1px solid #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      margin-bottom: 24px;
+    }
+
+    .logo-icon {
+      font-size: 28px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .nav-item:hover {
+      background: #2a2a2a;
+      color: #e5e5e5;
+    }
+
+    .nav-item.active {
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 20px;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 16px 0;
+    }
+
+    .recents {
+      flex: 1;
+      overflow-y: auto;
+      margin-top: 16px;
+    }
+
+    .recents-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding: 0 16px;
+    }
+
+    .recent-item {
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.2s;
+    }
+
+    .recent-item:hover {
+      background: #2a2a2a;
+      color: #e5e5e5;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #0d0d0d;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #1a3a1a;
+      border: 1px solid #2d5a2d;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .stats {
+      display: flex;
+      gap: 24px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .model-selector {
+      padding: 8px 16px;
+      background: #1f1f1f;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      color: #e5e5e5;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .model-selector:hover {
+      background: #2a2a2a;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .welcome {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 60px 0;
+    }
+
+    .greeting {
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtext {
+      font-size: 18px;
+      color: #9ca3af;
+      margin-bottom: 48px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .action-card {
+      padding: 24px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-card:hover {
+      background: #1f1f1f;
+      border-color: #3a3a3a;
+      transform: translateY(-2px);
+    }
+
+    .action-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .action-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .action-desc {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    /* Chat Area */
+    .chat-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding-bottom: 120px;
+    }
+
+    .message {
+      margin-bottom: 24px;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .message-name {
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .message-content {
+      padding: 16px 20px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      line-height: 1.6;
+      margin-left: 44px;
+    }
+
+    .message.user .message-content {
+      background: #1f1f1f;
+    }
+
+    .message.assistant .message-avatar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* Input Area */
+    .input-container {
+      position: fixed;
+      bottom: 0;
+      left: 280px;
+      right: 0;
+      background: #0d0d0d;
+      border-top: 1px solid #2a2a2a;
+      padding: 24px 32px;
+    }
+
+    .input-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 16px 120px 16px 20px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      color: #e5e5e5;
+      font-size: 15px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-box:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .input-actions {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .input-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .input-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #2a2a2a;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Metrics Panel */
+    .metrics-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .metric-card {
+      padding: 24px;
+      background: #171717;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .metric-trend {
+      font-size: 13px;
+      color: #22c55e;
+    }
+
+    .metric-trend.down {
+      color: #ef4444;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #171717;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2a2a2a;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3a3a3a;
+    }
+
+    /* Code blocks */
+    pre {
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    code {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 13px;
+      color: #a5d6ff;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">🦅</div>
+        <div class="logo-text">OpenClaw</div>
+      </div>
+
+      <div class="nav-item active" data-view="chat">
+        <span class="nav-icon">💬</span>
+        <span>New Task</span>
+      </div>
+      <div class="nav-item" data-view="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item" data-view="tasks">
+        <span class="nav-icon">📋</span>
+        <span>Tasks</span>
+      </div>
+      <div class="nav-item" data-view="agents">
+        <span class="nav-icon">🤖</span>
+        <span>Agents</span>
+      </div>
+      <div class="nav-item" data-view="improvements">
+        <span class="nav-icon">⚡</span>
+        <span>Improvements</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="recents">
+        <div class="recents-title">Recent Tasks</div>
+        <div id="recentsList"></div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+      <div class="header">
+        <div class="header-left">
+          <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>System Healthy</span>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value" id="totalTasks">0</div>
+              <div class="stat-label">Tasks</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="successRate">0%</div>
+              <div class="stat-label">Success</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value" id="totalCost">$0</div>
+              <div class="stat-label">Cost</div>
+            </div>
+          </div>
+        </div>
+        <div class="header-right">
+          <select class="model-selector" id="modelSelector">
+            <option value="code-generator">Code Generator</option>
+            <option value="analyzer">Analyzer</option>
+            <option value="knowledge-extractor">Knowledge Extractor</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Chat View -->
+      <div id="chatView" class="content">
+        <div class="welcome" id="welcomeScreen">
+          <div class="greeting">Evening, Engineer ✨</div>
+          <div class="subtext">What would you like to automate today?</div>
+
+          <div class="quick-actions">
+            <div class="action-card" data-action="review">
+              <div class="action-icon">🔍</div>
+              <div class="action-title">Code Review</div>
+              <div class="action-desc">Analyze code for security & quality</div>
+            </div>
+            <div class="action-card" data-action="document">
+              <div class="action-icon">📝</div>
+              <div class="action-title">Generate Docs</div>
+              <div class="action-desc">Create comprehensive documentation</div>
+            </div>
+            <div class="action-card" data-action="architect">
+              <div class="action-icon">🏗️</div>
+              <div class="action-title">Architecture</div>
+              <div class="action-desc">Review system design & scalability</div>
+            </div>
+            <div class="action-card" data-action="generate">
+              <div class="action-icon">⚡</div>
+              <div class="action-title">Generate Code</div>
+              <div class="action-desc">Create production-ready code</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-container hidden" id="chatMessages"></div>
+      </div>
+
+      <!-- Dashboard View -->
+      <div id="dashboardView" class="content hidden">
+        <div class="metrics-panel" id="metricsPanel"></div>
+        <div id="tasksTable"></div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-container">
+        <div class="input-wrapper">
+          <textarea
+            id="promptInput"
+            class="input-box"
+            placeholder="Ask anything or describe your task..."
+            rows="1"
+          ></textarea>
+          <div class="input-actions">
+            <button id="submitBtn" class="input-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let tasks = [];
+    let currentView = 'chat';
+    let ws = null;
+
+    // Initialize WebSocket
+    function connectWebSocket() {
+      ws = new WebSocket('ws://localhost:8789');
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'task-event') {
+          handleTaskEvent(data.data);
+        }
+      };
+    }
+
+    // Handle task events
+    function handleTaskEvent(event) {
+      console.log('Task event:', event);
+      if (event.type === 'task.completed') {
+        loadTasks();
+      }
+    }
+
+    // Load tasks
+    async function loadTasks() {
+      const stats = await fetch('/api/tasks').then(r => r.json()).catch(() => ({ tasks: [] }));
+      tasks = stats.tasks || [];
+
+      // Update stats
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.status === 'completed').length;
+      const successRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+      const totalCost = tasks.reduce((sum, t) => sum + (t.metrics?.costUSD || 0), 0);
+
+      document.getElementById('totalTasks').textContent = total;
+      document.getElementById('successRate').textContent = successRate + '%';
+      document.getElementById('totalCost').textContent = '$' + totalCost.toFixed(2);
+
+      // Update recents
+      const recentsList = document.getElementById('recentsList');
+      const recent = tasks.slice(-10).reverse();
+      recentsList.innerHTML = recent.map(t => `
+        <div class="recent-item" data-task-id="${t.id}">${t.description || 'Task ' + t.id}</div>
+      `).join('');
+    }
+
+    // Create task
+    async function createTask(input) {
+      const modelType = document.getElementById('modelSelector').value;
+
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tenantId: 'user',
+          sessionId: 'session-' + Date.now(),
+          description: input,
+          agents: [{
+            name: 'assistant',
+            type: modelType,
+            input: input
+          }]
+        })
+      });
+
+      const data = await response.json();
+      return data.taskId;
+    }
+
+    // Poll task status
+    async function pollTask(taskId) {
+      const response = await fetch(`/api/tasks/${taskId}`);
+      const task = await response.json();
+
+      if (task.status === 'completed' || task.status === 'failed') {
+        return task;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return pollTask(taskId);
+    }
+
+    // Add message
+    function addMessage(role, content) {
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const chatMessages = document.getElementById('chatMessages');
+
+      welcomeScreen.classList.add('hidden');
+      chatMessages.classList.remove('hidden');
+
+      const messageEl = document.createElement('div');
+      messageEl.className = 'message ' + role;
+      messageEl.innerHTML = `
+        <div class="message-header">
+          <div class="message-avatar">${role === 'user' ? '👤' : '🦅'}</div>
+          <div class="message-name">${role === 'user' ? 'You' : 'OpenClaw'}</div>
+        </div>
+        <div class="message-content">${formatContent(content)}</div>
+      `;
+
+      chatMessages.appendChild(messageEl);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Format content
+    function formatContent(content) {
+      // Simple markdown-like formatting
+      content = content.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+      content = content.replace(/\n/g, '<br>');
+      return content;
+    }
+
+    // Handle submit
+    async function handleSubmit() {
+      const input = document.getElementById('promptInput');
+      const submitBtn = document.getElementById('submitBtn');
+      const value = input.value.trim();
+
+      if (!value) return;
+
+      // Add user message
+      addMessage('user', value);
+      input.value = '';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="loading"></div>';
+
+      try {
+        // Create task
+        const taskId = await createTask(value);
+
+        // Poll for completion
+        const task = await pollTask(taskId);
+
+        // Add assistant response
+        const result = task.result?.[0] || 'Task completed';
+        addMessage('assistant', result);
+
+        // Reload tasks
+        await loadTasks();
+      } catch (error) {
+        addMessage('assistant', 'Sorry, there was an error processing your request.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send';
+      }
+    }
+
+    // Quick actions
+    document.querySelectorAll('.action-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const action = card.dataset.action;
+        const prompts = {
+          review: 'Review this code for security vulnerabilities and best practices:\n\n',
+          document: 'Generate comprehensive documentation for this code:\n\n',
+          architect: 'Analyze this system architecture for scalability, security, and cost:\n\n',
+          generate: 'Generate production-ready code for:\n\n'
+        };
+        document.getElementById('promptInput').value = prompts[action];
+        document.getElementById('promptInput').focus();
+      });
+    });
+
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        if (view) {
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          document.getElementById('chatView').classList.toggle('hidden', view !== 'chat');
+          document.getElementById('dashboardView').classList.toggle('hidden', view !== 'dashboard');
+        }
+      });
+    });
+
+    // Submit handlers
+    document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+    document.getElementById('promptInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSubmit();
+      }
+    });
+
+    // Auto-resize textarea
+    document.getElementById('promptInput').addEventListener('input', (e) => {
+      e.target.style.height = 'auto';
+      e.target.style.height = e.target.scrollHeight + 'px';
+    });
+
+    // Initialize
+    connectWebSocket();
+    loadTasks();
+  </script>
+</body>
+</html>
