@@ -14,6 +14,8 @@ AI Refinery compatible orchestration engine for Enterprise OpenClaw.
 
 ## Usage
 
+### Basic Usage
+
 ```typescript
 import { DistillerOrchestrator } from './orchestrator/distiller-orchestrator';
 
@@ -32,6 +34,31 @@ orchestrator.registerAgent('search', async (query: string) => {
 // Execute query with intelligent routing
 const result = await orchestrator.query('Research AI trends');
 ```
+
+### With SearchAgent Integration
+
+```typescript
+import { DistillerOrchestrator } from './orchestrator/distiller-orchestrator';
+import { SearchAgent } from '../extensions/agent-library/utility-agents/search-agent';
+
+// Create orchestrator
+const orchestrator = new DistillerOrchestrator();
+await orchestrator.loadConfig('./config/distiller-config.yaml');
+
+// Create and register SearchAgent
+const searchAgent = new SearchAgent({
+  agentName: 'search',
+  agentDescription: 'Searches the web for information',
+  selfReflection: { enabled: true, maxAttempts: 2 },
+});
+
+orchestrator.registerAgent('search', (query) => searchAgent.execute(query));
+
+// Use with intelligent routing
+const result = await orchestrator.query('Search for TypeScript tutorials');
+```
+
+See `examples/search-agent-example.ts` for complete integration example.
 
 ## Test Results
 
