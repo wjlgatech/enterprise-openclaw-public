@@ -642,19 +642,32 @@
       }
     }
 
-    // Load tasks - Using health endpoint for stats
+    // Load tasks - Using REAL audit data
     async function loadTasks() {
       try {
         const health = await fetch('/api/health').then(r => r.json()).catch(() => ({ status: 'unknown' }));
+        const auditData = await fetch('/api/audit/recent?limit=10').then(r => r.json()).catch(() => ({ entries: [] }));
 
-        // Update stats with system info
-        document.getElementById('totalTasks').textContent = '0';
-        document.getElementById('successRate').textContent = health.status === 'healthy' ? '100%' : '0%';
-        document.getElementById('totalCost').textContent = '$0.00';
+        // Update stats with REAL data
+        const totalActions = auditData.entries?.length || 0;
+        const allowedActions = auditData.entries?.filter(e => e.permission.allowed).length || 0;
+        const successRate = totalActions > 0 ? Math.round((allowedActions / totalActions) * 100) : 0;
 
-        // Update recents list
+        document.getElementById('totalTasks').textContent = totalActions;
+        document.getElementById('successRate').textContent = successRate + '%';
+        document.getElementById('totalCost').textContent = '$0.00'; // TODO: Calculate from real usage
+
+        // Update recents list with REAL audit entries
         const recentsList = document.getElementById('recentsList');
-        recentsList.innerHTML = '<div class="recent-item">No recent tasks</div>';
+        if (auditData.entries && auditData.entries.length > 0) {
+          recentsList.innerHTML = auditData.entries.slice(0, 5).map(entry => {
+            const time = new Date(entry.timestamp).toLocaleTimeString();
+            const status = entry.permission.allowed ? '✅' : '❌';
+            return `<div class="recent-item">${status} ${entry.action.type} - ${time}</div>`;
+          }).join('');
+        } else {
+          recentsList.innerHTML = '<div class="recent-item">No actions yet</div>';
+        }
       } catch (error) {
         console.error('Failed to load stats:', error);
       }
@@ -779,9 +792,37 @@
       e.target.style.height = e.target.scrollHeight + 'px';
     });
 
-    // Initialize
+    // Update system status badge with real data
+    async function updateSystemStatus() {
+      try {
+        const health = await fetch('/api/health').then(r => r.json()).catch(() => null);
+        if (health) {
+          const statusBadge = document.querySelector('.status-badge span:last-child');
+          const statusDot = document.querySelector('.status-dot');
+
+          if (health.status === 'healthy') {
+            statusBadge.textContent = 'System Healthy';
+            statusDot.style.background = '#22c55e';
+          } else {
+            statusBadge.textContent = 'System Degraded';
+            statusDot.style.background = '#ef4444';
+          }
+        }
+      } catch (error) {
+        console.error('Failed to update status:', error);
+      }
+    }
+
+    // Initialize with REAL data
     connectWebSocket();
     loadTasks();
+    updateSystemStatus();
+
+    // Refresh every 10 seconds with REAL data
+    setInterval(() => {
+      loadTasks();
+      updateSystemStatus();
+    }, 10000);
   </script>
 </body>
 </html>

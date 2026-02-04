@@ -13,6 +13,11 @@ import { EnterpriseGateway } from './packages/enterprise/src/integration/enterpr
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import pino from 'pino';
+import Anthropic from '@anthropic-ai/sdk';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: '/Users/jialiang.wu/Documents/Projects/.env' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,6 +25,11 @@ const __dirname = dirname(__filename);
 const app = express();
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 const port = process.env.ENTERPRISE_PORT || 18789;
+
+// Initialize REAL LLM client - Using Anthropic Claude
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY
+});
 
 // Middleware
 app.use(express.json());
@@ -188,53 +198,40 @@ app.post('/api/chat', async (req, res) => {
       });
     }
 
-    // Simple response for demo
-    let response = `**Enterprise OpenClaw Gateway Active** 🦅
+    // Get real system context
+    const systemContext = `You are Enterprise OpenClaw, an AI assistant with enterprise governance.
 
-I received your message: "${message}"
+**Current System Status:**
+- Enterprise Gateway: Running on port ${port}
+- OpenClaw Backend: ${await gateway.getOpenClawHealth() ? 'Connected' : 'Unavailable'}
+- Audit Logging: Active (${await gateway.getOpenClawHealth() ? 'logging all actions' : 'ready'})
+- Permission System: Enforcing ${gateway.getAllCapabilities().length} capabilities
 
-**Phase 1 Features Active:**
-✅ Permission Checks - Fine-grained access control
-✅ Audit Logging - Complete action trail
-✅ OpenClaw Integration - Browser, shell, file operations
+**Available Capabilities:**
+${gateway.getAllCapabilities().map(c => `- ${c}`).join('\n')}
 
-**To Test Governance:**
-Try: "test permission check"
-Try: "show capabilities"
-Try: "system status"
+**Your Role:**
+Help users understand and use Enterprise OpenClaw features. Answer questions about capabilities, permissions, audit logging, and system status. Be helpful and accurate.`;
 
-**Current Status:**
-- OpenClaw: ${await gateway.getOpenClawHealth() ? '✅ Connected' : '⚠️  Unavailable'}
-- Audit: ✅ Logging all actions
-- Gateway: ✅ Ready
+    // REAL LLM CALL - Using Anthropic Claude API
+    const response = await anthropic.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 1024,
+      system: systemContext,
+      messages: [
+        { role: 'user', content: message }
+      ]
+    });
 
-What would you like to do?`;
-
-    // Handle special commands
-    if (message.toLowerCase().includes('capability') || message.toLowerCase().includes('capabilities')) {
-      const caps = gateway.getAllCapabilities();
-      response = `**Available Capabilities:**\n\n${caps.map(c => `• ${c}`).join('\n')}\n\nThese control what actions users can perform.`;
-    } else if (message.toLowerCase().includes('status')) {
-      const healthy = await gateway.getOpenClawHealth();
-      response = `**System Status:**
-
-🦅 Enterprise Gateway: ✅ Running
-🔌 OpenClaw Backend: ${healthy ? '✅ Connected' : '⚠️  Unavailable'}
-📝 Audit Logging: ✅ Active
-🔐 Permission System: ✅ Enforcing
-
-**Metrics:**
-• Supported Actions: ${gateway.getSupportedActions().length}
-• Total Capabilities: ${gateway.getAllCapabilities().length}
-• Port: ${port}
-
-Everything is operational!`;
-    }
+    const responseText = response.content[0]?.type === 'text'
+      ? response.content[0].text
+      : 'No response generated';
 
     res.json({
-      response,
-      model: 'Enterprise OpenClaw Gateway',
-      timestamp: Date.now()
+      response: responseText,
+      model: response.model,
+      timestamp: Date.now(),
+      usage: response.usage
     });
 
   } catch (error) {
