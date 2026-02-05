@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🦅 Enterprise OpenClaw
+# 🦅 Enterprise OpenClaw Public
 
 ### GenAI-Native Multi-Agent Platform with Self-Improvement
 
@@ -17,9 +17,9 @@
 
 ---
 
-## 🎯 What is Enterprise OpenClaw?
+## 🎯 What is Enterprise OpenClaw Public?
 
-Enterprise OpenClaw is a **production-ready platform** for building GenAI-powered multi-agent systems with:
+Enterprise OpenClaw Public is a **production-ready platform** for building GenAI-powered multi-agent systems with:
 
 - 🧠 **Advanced Knowledge Graph** - Dynamic reasoning with DRIFT RAG technology
 - 🤖 **Multi-Agent Orchestration** - Coordinate multiple AI agents seamlessly
@@ -62,6 +62,32 @@ Open http://localhost:3000 and you're running the full application!
 > **Note:** For public repositories, you can also use:
 > `curl -fsSL https://raw.githubusercontent.com/wjlgatech/enterprise-openclaw/main/install.sh | bash`
 
+### 🔑 Getting Your API Token
+
+**IMPORTANT:** Enterprise OpenClaw Public requires an **Anthropic API Token** (not API Key) to connect with Claude AI.
+
+#### How to Get Your Token:
+
+1. **Visit Anthropic Console:** Go to https://console.anthropic.com/
+2. **Sign Up/Login:** Create account or login with your credentials
+3. **Navigate to API Keys:** Click on your profile → "API Keys" section
+4. **Create New Key:** Click "Create Key" button
+5. **Copy Token:** Copy the generated token (starts with `sk-ant-api...`)
+6. **Save Securely:** Store in your `.env` file
+
+#### Setup Your Token:
+
+```bash
+# In your project root, create/edit .env file
+echo "ANTHROPIC_API_KEY=sk-ant-api-your-token-here" > .env
+```
+
+**Important Notes:**
+- This is a **token** (starts with `sk-ant-api...`), NOT a regular API key
+- Keep your token secret - never commit it to git
+- Free tier available for testing
+- See https://www.anthropic.com/pricing for usage limits
+
 ### 🌐 What You Get: Full Application
 
 Once running, you'll have access to:
@@ -93,7 +119,7 @@ curl -X POST http://localhost:3000/api/query \
 # Add knowledge
 curl -X POST http://localhost:3000/api/knowledge \
   -H "Content-Type: application/json" \
-  -d '{"content": "Enterprise OpenClaw is amazing", "type": "fact"}'
+  -d '{"content": "Enterprise OpenClaw Public is amazing", "type": "fact"}'
 ```
 
 **That's it!** 🎉 Full platform running in one command.
@@ -125,7 +151,7 @@ curl -X POST http://localhost:3000/api/knowledge \
 ## 📦 What's Included
 
 ```
-enterprise-openclaw/
+enterprise-openclaw-public/
 ├── packages/core/          # 🔓 Open source (Apache 2.0)
 │   ├── Knowledge Graph     # Store and query knowledge
 │   ├── Vector Store        # Semantic search
@@ -278,9 +304,9 @@ Built with modern, production-ready technologies:
 
 ---
 
-## 🌟 Why Enterprise OpenClaw?
+## 🌟 Why Enterprise OpenClaw Public?
 
-| Feature | Enterprise OpenClaw | Langchain | LlamaIndex |
+| Feature | Enterprise OpenClaw Public | Langchain | LlamaIndex |
 |---------|---------------------|-----------|------------|
 | Knowledge Graph | ✅ Native | ❌ | ✅ Basic |
 | Self-Improvement | ✅ DRIFT RAG | ❌ | ❌ |
@@ -342,7 +368,7 @@ See [LICENSE_SYSTEM_GUIDE.md](./LICENSE_SYSTEM_GUIDE.md) for details.
 
 ## 🙏 Acknowledgments
 
-Built with ❤️ by the Enterprise OpenClaw Team
+Built with ❤️ by the Enterprise OpenClaw Public Team
 
 **Powered by Claude Sonnet 4.5**
 
@@ -354,6 +380,6 @@ Built with ❤️ by the Enterprise OpenClaw Team
 
 ---
 
-*Enterprise OpenClaw - Where AI meets intelligence* 🦅
+*Enterprise OpenClaw Public - Where AI meets intelligence* 🦅
 
 </div>
