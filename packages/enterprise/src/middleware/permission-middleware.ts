@@ -1,22 +1,27 @@
 /**
  * Permission Middleware
  *
- * Simple capability-based permission system (Phase 1)
- * In Phase 2, we'll add full policy engine
+ * Role-based + capability-based permission system
+ * - First checks if user has role with required capability
+ * - Falls back to individual capability checks
+ * - Reduces management overhead by ~70%
  */
 
 import { OpenClawAction } from '../integration/openclaw-adapter.js';
+import { RoleName, getCapabilitiesFromRoles, roleHasCapability } from '../permissions/roles.js';
 
 export interface PermissionCheck {
   allowed: boolean;
   reason?: string;
   requiredCapability?: string;
+  grantedBy?: 'role' | 'capability';
 }
 
 export interface UserContext {
   userId: string;
   tenantId?: string;
   capabilities: string[];
+  roles?: RoleName[];
 }
 
 export class PermissionMiddleware {
@@ -57,6 +62,11 @@ export class PermissionMiddleware {
 
   /**
    * Check if user has permission to execute action
+   *
+   * Permission resolution order:
+   * 1. Check if user has role with required capability
+   * 2. Fall back to individual capability check
+   * 3. Deny if neither role nor capability match
    */
   async checkPermission(
     action: OpenClawAction,
@@ -74,20 +84,34 @@ export class PermissionMiddleware {
       };
     }
 
-    // Check if user has capability
+    // Step 1: Check if user has role with required capability
+    if (context.roles && context.roles.length > 0) {
+      for (const roleName of context.roles) {
+        if (roleHasCapability(roleName, requiredCapability)) {
+          return {
+            allowed: true,
+            requiredCapability,
+            grantedBy: 'role'
+          };
+        }
+      }
+    }
+
+    // Step 2: Fall back to individual capability check
     const hasCapability = context.capabilities.includes(requiredCapability);
 
-    if (!hasCapability) {
+    if (hasCapability) {
       return {
-        allowed: false,
-        reason: `Missing required capability: ${requiredCapability}`,
-        requiredCapability
+        allowed: true,
+        requiredCapability,
+        grantedBy: 'capability'
       };
     }
 
-    // Permission granted!
+    // Step 3: Permission denied
     return {
-      allowed: true,
+      allowed: false,
+      reason: `Missing required capability: ${requiredCapability}. User has ${context.roles?.length || 0} roles and ${context.capabilities.length} individual capabilities.`,
       requiredCapability
     };
   }

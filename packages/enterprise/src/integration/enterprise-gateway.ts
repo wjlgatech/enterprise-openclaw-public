@@ -13,6 +13,7 @@ import { PermissionMiddleware, UserContext } from '../middleware/permission-midd
 import { AuditMiddleware } from '../middleware/audit-middleware.js';
 import { LicenseValidator } from '../licensing/license-validator.js';
 import pino from 'pino';
+import type { Server as SocketIOServer } from 'socket.io';
 
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
@@ -27,6 +28,7 @@ export interface EnterpriseConfig {
   };
   audit: {
     logPath: string;
+    socketServer?: SocketIOServer;
   };
 }
 
@@ -44,7 +46,7 @@ export class EnterpriseGateway {
     });
 
     this.permissionMiddleware = new PermissionMiddleware();
-    this.auditMiddleware = new AuditMiddleware(config.audit.logPath);
+    this.auditMiddleware = new AuditMiddleware(config.audit.logPath, config.audit.socketServer);
 
     if (config.license) {
       this.licenseValidator = new LicenseValidator({

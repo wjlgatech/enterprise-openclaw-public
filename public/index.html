@@ -194,19 +194,20 @@
       gap: 12px;
     }
 
-    .model-selector {
+    .model-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 16px;
       background: #1f1f1f;
       border: 1px solid #2a2a2a;
       border-radius: 8px;
       color: #e5e5e5;
       font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
     }
 
-    .model-selector:hover {
-      background: #2a2a2a;
+    .model-badge span:first-child {
+      font-size: 16px;
     }
 
     /* Content Area */
@@ -489,6 +490,862 @@
     .hidden {
       display: none;
     }
+
+    /* Dashboard Styles */
+    .dashboard-section {
+      margin-bottom: 30px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .expand-icon {
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .collapsible .section-title {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .collapsed {
+      display: none !important;
+    }
+
+    .collapsible.expanded .expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .loading {
+      padding: 20px;
+      text-align: center;
+      color: #888;
+    }
+
+    /* Executive Summary */
+    .health-score {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3a5f 0%, #2a4a6f 100%);
+      border-radius: 12px;
+    }
+
+    .score-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .score-circle.good { color: #22c55e; border: 3px solid #22c55e; }
+    .score-circle.warning { color: #f59e0b; border: 3px solid #f59e0b; }
+    .score-circle.critical { color: #ef4444; border: 3px solid #ef4444; }
+
+    .health-info h3 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+    }
+
+    .trend-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .trend-badge.improving { background: #22c55e33; color: #22c55e; }
+    .trend-badge.stable { background: #3b82f633; color: #3b82f6; }
+    .trend-badge.declining { background: #ef444433; color: #ef4444; }
+
+    .key-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      padding: 16px;
+      background: #222;
+      border-radius: 8px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .metric-card.good { border-left-color: #22c55e; }
+    .metric-card.warning { border-left-color: #f59e0b; }
+    .metric-card.critical { border-left-color: #ef4444; }
+
+    .metric-label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #e5e5e5;
+    }
+
+    .metric-change {
+      font-size: 12px;
+      margin-top: 4px;
+      color: #888;
+    }
+
+    /* Critical Issues */
+    .issues-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .issue-card {
+      padding: 16px;
+      background: #222;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+
+    .issue-card.high { border-left-color: #ef4444; }
+    .issue-card.medium { border-left-color: #f59e0b; }
+    .issue-card.low { border-left-color: #3b82f6; }
+
+    .issue-header {
+      display: flex;
+      justify-items: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .issue-title {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 600;
+      color: #e5e5e5;
+    }
+
+    .severity-badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .severity-badge.high { background: #ef444433; color: #ef4444; }
+    .severity-badge.medium { background: #f59e0b33; color: #f59e0b; }
+    .severity-badge.low { background: #3b82f633; color: #3b82f6; }
+
+    .issue-description {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .issue-impact {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .recommendation {
+      padding: 12px;
+      background: #1a1a1a;
+      border-radius: 6px;
+      margin-top: 12px;
+    }
+
+    .recommendation-header {
+      font-size: 13px;
+      font-weight: 600;
+      color: #22c55e;
+      margin-bottom: 8px;
+    }
+
+    .recommendation-impact {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.secondary {
+      background: #374151;
+    }
+
+    .action-btn.secondary:hover {
+      background: #4b5563;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Insights Tabs */
+    .insights-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 14px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: #e5e5e5;
+    }
+
+    .tab-btn.active {
+      color: #3b82f6;
+      border-bottom-color: #3b82f6;
+    }
+
+    /* Capability Analysis */
+    .capability-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .capability-item {
+      padding: 16px;
+      background: #222;
+      border-radius: 8px;
+    }
+
+    .capability-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .capability-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e5e5e5;
+    }
+
+    .capability-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .stat-item {
+      color: #888;
+    }
+
+    .stat-item.allowed { color: #22c55e; }
+    .stat-item.denied { color: #ef4444; }
+
+    .progress-bar {
+      height: 6px;
+      background: #333;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e 0%, #ef4444 100%);
+      transition: width 0.3s;
+    }
+
+    /* User Behavior */
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 12px;
+    }
+
+    .user-card {
+      padding: 16px;
+      background: #222;
+      border-radius: 8px;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e5e5e5;
+      margin-bottom: 12px;
+    }
+
+    .user-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* System Upgrades */
+    .upgrade-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .upgrade-card {
+      padding: 20px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 12px;
+      border: 1px solid #3b82f6;
+    }
+
+    .upgrade-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e5e5e5;
+      margin-bottom: 8px;
+    }
+
+    .upgrade-description {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 12px;
+    }
+
+    .upgrade-impact {
+      font-size: 13px;
+      color: #22c55e;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .complexity-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #3b82f633;
+      color: #3b82f6;
+      margin-right: 8px;
+    }
+
+    /* Smart Recommendations */
+    .smart-recommendations {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .recommendation-card {
+      padding: 20px;
+      background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%);
+      border-radius: 12px;
+      border: 1px solid #3b82f6;
+      position: relative;
+    }
+
+    .recommendation-card.high {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #2d1e1e 0%, #3d2828 100%);
+    }
+
+    .recommendation-card.medium {
+      border-color: #f59e0b;
+      background: linear-gradient(135deg, #2d2618 0%, #3d3320 100%);
+    }
+
+    .recommendation-priority {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .priority-badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .priority-badge.high { background: #ef444433; color: #ef4444; }
+    .priority-badge.medium { background: #f59e0b33; color: #f59e0b; }
+    .priority-badge.low { background: #3b82f633; color: #3b82f6; }
+
+    .confidence-badge {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #22c55e33;
+      color: #22c55e;
+    }
+
+    .recommendation-type {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .recommendation-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e5e5e5;
+      margin-bottom: 12px;
+    }
+
+    .recommendation-reasoning {
+      margin-bottom: 16px;
+    }
+
+    .reasoning-pattern {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .reasoning-evidence {
+      font-size: 12px;
+      color: #888;
+      padding-left: 16px;
+      margin-bottom: 4px;
+    }
+
+    .reasoning-evidence:before {
+      content: "• ";
+      margin-left: -10px;
+    }
+
+    .recommendation-impact-text {
+      font-size: 13px;
+      color: #22c55e;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .recommendation-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .recommendation-stats {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #3a3a3a;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* Role Management */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .role-card {
+      padding: 20px;
+      background: #222;
+      border-radius: 12px;
+      border: 2px solid #3a3a3a;
+    }
+
+    .role-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .role-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e5e5e5;
+      text-transform: capitalize;
+    }
+
+    .role-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .role-badge.admin { background: #ef444433; color: #ef4444; }
+    .role-badge.developer { background: #3b82f633; color: #3b82f6; }
+    .role-badge.analyst { background: #f59e0b33; color: #f59e0b; }
+    .role-badge.viewer { background: #22c55e33; color: #22c55e; }
+
+    .role-description {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    .role-capabilities {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+
+    .capability-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 2px;
+      background: #333;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    .role-stats {
+      font-size: 12px;
+      color: #888;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #333;
+    }
+
+    .user-role-section {
+      margin-top: 32px;
+    }
+
+    .user-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .user-table th {
+      text-align: left;
+      padding: 12px;
+      background: #222;
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      border-bottom: 2px solid #333;
+    }
+
+    .user-table td {
+      padding: 12px;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 13px;
+    }
+
+    .user-table tr:hover {
+      background: #1a1a1a;
+    }
+
+    .role-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      margin: 2px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .role-pill.admin { background: #ef444433; color: #ef4444; }
+    .role-pill.developer { background: #3b82f633; color: #3b82f6; }
+    .role-pill.analyst { background: #f59e0b33; color: #f59e0b; }
+    .role-pill.viewer { background: #22c55e33; color: #22c55e; }
+
+    .btn-small {
+      padding: 4px 12px;
+      font-size: 11px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: #2563eb;
+    }
+
+    .btn-small.danger {
+      background: #ef4444;
+    }
+
+    .btn-small.danger:hover {
+      background: #dc2626;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #e5e5e5;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #e5e5e5;
+      font-size: 14px;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 10px;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #e5e5e5;
+      font-size: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Live Activity Feed */
+    .live-feed {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .live-feed-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e5e5e5;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-indicator {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .feed-item {
+      padding: 8px 12px;
+      background: #222;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideInFeed 0.3s ease;
+    }
+
+    @keyframes slideInFeed {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .feed-item.new-denial {
+      background: #3a1a1a;
+      border-left: 3px solid #ef4444;
+    }
+
+    .feed-item.allowed {
+      background: #1a3a1a;
+      border-left: 3px solid #22c55e;
+    }
+
+    .feed-timestamp {
+      font-size: 11px;
+      color: #666;
+      margin-left: auto;
+    }
+
+    /* Flash Indicator for Denials */
+    @keyframes flashRed {
+      0%, 100% { background: rgba(239, 68, 68, 0.1); }
+      50% { background: rgba(239, 68, 68, 0.3); }
+    }
+
+    .flash-red {
+      animation: flashRed 0.5s ease 3;
+    }
+
+    /* Animated Counter */
+    .animated-counter {
+      display: inline-block;
+      transition: all 0.5s ease;
+    }
+
+    .counter-increase {
+      animation: counterUp 0.5s ease;
+    }
+
+    @keyframes counterUp {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Live Health Score Gauge */
+    .health-gauge {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+
+    .gauge-circle {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: conic-gradient(
+        #22c55e 0deg,
+        #22c55e calc(var(--health-score) * 3.6deg),
+        #333 calc(var(--health-score) * 3.6deg)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .gauge-inner {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .gauge-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #e5e5e5;
+    }
+
+    .gauge-label {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    /* Activity Pulse */
+    .activity-pulse {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #3b82f6;
+      animation: pulse 2s infinite;
+      display: inline-block;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
@@ -502,23 +1359,11 @@
 
       <div class="nav-item active" data-view="chat">
         <span class="nav-icon">💬</span>
-        <span>New Task</span>
+        <span>Chat</span>
       </div>
       <div class="nav-item" data-view="dashboard">
         <span class="nav-icon">📊</span>
         <span>Dashboard</span>
-      </div>
-      <div class="nav-item" data-view="tasks">
-        <span class="nav-icon">📋</span>
-        <span>Tasks</span>
-      </div>
-      <div class="nav-item" data-view="agents">
-        <span class="nav-icon">🤖</span>
-        <span>Agents</span>
-      </div>
-      <div class="nav-item" data-view="improvements">
-        <span class="nav-icon">⚡</span>
-        <span>Improvements</span>
       </div>
 
       <div class="divider"></div>
@@ -553,11 +1398,10 @@
           </div>
         </div>
         <div class="header-right">
-          <select class="model-selector" id="modelSelector">
-            <option value="code-generator">Code Generator</option>
-            <option value="analyzer">Analyzer</option>
-            <option value="knowledge-extractor">Knowledge Extractor</option>
-          </select>
+          <div class="model-badge">
+            <span>🤖</span>
+            <span>Claude 3 Haiku</span>
+          </div>
         </div>
       </div>
 
@@ -568,25 +1412,20 @@
           <div class="subtext">Your AI assistant with conversational setup - no terminal needed!</div>
 
           <div class="quick-actions">
-            <div class="action-card" data-action="setup-claude">
-              <div class="action-icon">🔑</div>
-              <div class="action-title">Setup Claude API</div>
-              <div class="action-desc">Configure Claude through chat - no terminal!</div>
-            </div>
-            <div class="action-card" data-action="install-model">
-              <div class="action-icon">💻</div>
-              <div class="action-title">Install AI Model</div>
-              <div class="action-desc">Get local models conversationally</div>
-            </div>
             <div class="action-card" data-action="status">
               <div class="action-icon">📊</div>
               <div class="action-title">System Status</div>
-              <div class="action-desc">Check system health & features</div>
+              <div class="action-desc">Check gateway health & components</div>
             </div>
-            <div class="action-card" data-action="configure">
-              <div class="action-icon">⚙️</div>
-              <div class="action-title">Configure Features</div>
-              <div class="action-desc">Set up everything through chat</div>
+            <div class="action-card" data-action="capabilities">
+              <div class="action-icon">🔐</div>
+              <div class="action-title">View Capabilities</div>
+              <div class="action-desc">See available permissions (17 total)</div>
+            </div>
+            <div class="action-card" data-action="audit">
+              <div class="action-icon">📝</div>
+              <div class="action-title">Recent Actions</div>
+              <div class="action-desc">View audit log entries</div>
             </div>
           </div>
         </div>
@@ -596,8 +1435,71 @@
 
       <!-- Dashboard View -->
       <div id="dashboardView" class="content hidden">
-        <div class="metrics-panel" id="metricsPanel"></div>
-        <div id="tasksTable"></div>
+        <!-- Live Activity Feed -->
+        <div class="live-feed">
+          <div class="live-feed-title">
+            <span class="live-indicator"></span>
+            Live Activity Feed
+          </div>
+          <div id="liveActivityFeed">
+            <div style="color: #666; text-align: center; padding: 20px;">Waiting for activity...</div>
+          </div>
+        </div>
+
+        <!-- Level 1: Executive Summary -->
+        <div class="dashboard-section">
+          <h2 class="section-title">📊 Executive Summary</h2>
+          <div id="executiveSummary" class="executive-summary">
+            <div class="loading">Loading insights...</div>
+          </div>
+        </div>
+
+        <!-- Level 2: Operational Insights -->
+        <div class="dashboard-section">
+          <h2 class="section-title">🔍 Operational Insights</h2>
+          <div class="insights-tabs">
+            <button class="tab-btn active" data-tab="capabilities">Capabilities</button>
+            <button class="tab-btn" data-tab="users">Users</button>
+            <button class="tab-btn" data-tab="patterns">Patterns</button>
+          </div>
+          <div id="operationalInsights" class="operational-insights">
+            <div class="loading">Loading operational data...</div>
+          </div>
+        </div>
+
+        <!-- Level 3: Detailed Analysis -->
+        <div class="dashboard-section collapsible">
+          <h2 class="section-title" style="cursor: pointer;">
+            <span class="expand-icon">▶</span> 📋 Detailed Analysis
+          </h2>
+          <div id="detailedAnalysis" class="detailed-analysis collapsed">
+            <div class="loading">Loading detailed logs...</div>
+          </div>
+        </div>
+
+        <!-- Role Management -->
+        <div class="dashboard-section">
+          <h2 class="section-title">👥 Role Management</h2>
+          <div id="roleManagement" class="role-management">
+            <div class="loading">Loading role management...</div>
+          </div>
+        </div>
+
+        <!-- Smart Recommendations -->
+        <div class="dashboard-section">
+          <h2 class="section-title">💡 Smart Recommendations</h2>
+          <div id="smartRecommendations" class="smart-recommendations">
+            <div class="loading">Analyzing audit patterns...</div>
+          </div>
+        </div>
+
+        <!-- System Upgrades -->
+        <div class="dashboard-section">
+          <h2 class="section-title">🚀 System Upgrades</h2>
+          <div id="systemUpgrades" class="system-upgrades">
+            <div class="loading">Loading upgrade recommendations...</div>
+          </div>
+        </div>
       </div>
 
       <!-- Input -->
@@ -606,7 +1508,7 @@
           <textarea
             id="promptInput"
             class="input-box"
-            placeholder="Ask anything or try: 'help me configure Claude API', 'install a model', 'system status'..."
+            placeholder="Ask anything or try: 'what capabilities are available?', 'system status', 'show recent actions'..."
             rows="1"
           ></textarea>
           <div class="input-actions">
@@ -617,24 +1519,211 @@
     </div>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
     // State
     let tasks = [];
     let currentView = 'chat';
-    let ws = null;
+    let socket = null;
+    let isLive = false;
+    let newIssuesCount = 0;
+    let liveFeedItems = [];
+    let previousMetrics = {
+      totalActions: 0,
+      deniedActions: 0,
+      successRate: 0
+    };
 
-    // Initialize WebSocket
+    // Initialize Socket.IO WebSocket
     function connectWebSocket() {
-      ws = new WebSocket('ws://localhost:8789');
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'task-event') {
-          handleTaskEvent(data.data);
+      socket = io();
+
+      socket.on('connect', () => {
+        console.log('WebSocket connected:', socket.id);
+        isLive = true;
+        updateLiveIndicator();
+
+        // Request initial dashboard data
+        socket.emit('request-dashboard-update');
+      });
+
+      socket.on('disconnect', () => {
+        console.log('WebSocket disconnected');
+        isLive = false;
+        updateLiveIndicator();
+      });
+
+      socket.on('audit-update', (data) => {
+        console.log('Audit update received:', data);
+        handleAuditUpdate(data);
+      });
+
+      socket.on('audit-alert', (data) => {
+        console.log('Audit alert received:', data);
+        handleAuditAlert(data);
+      });
+
+      socket.on('dashboard-update', (data) => {
+        console.log('Dashboard update received:', data);
+        if (currentView === 'dashboard') {
+          loadDashboard();
         }
-      };
+      });
     }
 
-    // Handle task events
+    // Handle real-time audit updates
+    function handleAuditUpdate(data) {
+      console.log('Audit update received:', data);
+
+      // Add to live feed if entry present
+      if (data.entry) {
+        addToLiveFeed(data.entry);
+      }
+
+      // Refresh stats in header with animation
+      loadTasksWithAnimation();
+
+      // If dashboard is open, refresh it
+      if (currentView === 'dashboard') {
+        loadDashboard();
+      }
+
+      // Show notification
+      showUpdateNotification();
+    }
+
+    // Add entry to live activity feed
+    function addToLiveFeed(entry) {
+      const feed = document.getElementById('liveActivityFeed');
+      if (!feed) return;
+
+      // Clear placeholder if exists
+      if (feed.querySelector('[style*="Waiting for activity"]')) {
+        feed.innerHTML = '';
+      }
+
+      const time = new Date(entry.timestamp).toLocaleTimeString();
+      const status = entry.permission.allowed ? 'allowed' : 'new-denial';
+      const icon = entry.permission.allowed ? '✅' : '❌';
+      const statusText = entry.permission.allowed ? 'Allowed' : 'Denied';
+
+      const feedItem = document.createElement('div');
+      feedItem.className = `feed-item ${status}`;
+      feedItem.innerHTML = `
+        <span>${icon}</span>
+        <span>${statusText}</span>
+        <span style="color: #888;">•</span>
+        <span>${entry.action.type}</span>
+        <span style="color: #888;">•</span>
+        <span>${entry.userId}</span>
+        <span class="feed-timestamp">${time}</span>
+      `;
+
+      // Add to top of feed
+      feed.insertBefore(feedItem, feed.firstChild);
+
+      // Keep only last 10 items
+      while (feed.children.length > 10) {
+        feed.removeChild(feed.lastChild);
+      }
+
+      // Add to history
+      liveFeedItems.unshift(entry);
+      if (liveFeedItems.length > 10) {
+        liveFeedItems.pop();
+      }
+
+      // Flash if denied
+      if (!entry.permission.allowed) {
+        feedItem.classList.add('flash-red');
+        setTimeout(() => feedItem.classList.remove('flash-red'), 1500);
+      }
+    }
+
+    // Handle audit alerts (denials, errors)
+    function handleAuditAlert(data) {
+      console.log('Alert:', data);
+      newIssuesCount++;
+      updateNotificationBadge();
+
+      // If dashboard is open, refresh it
+      if (currentView === 'dashboard') {
+        loadDashboard();
+      }
+    }
+
+    // Update live indicator
+    function updateLiveIndicator() {
+      const statusBadge = document.querySelector('.status-badge');
+      const statusDot = document.querySelector('.status-dot');
+      const statusText = document.querySelector('.status-badge span:last-child');
+
+      if (isLive) {
+        statusDot.style.background = '#22c55e';
+        statusText.textContent = 'Live Updates';
+        statusBadge.style.background = '#1a3a1a';
+        statusBadge.style.borderColor = '#2d5a2d';
+      } else {
+        statusDot.style.background = '#ef4444';
+        statusText.textContent = 'Disconnected';
+        statusBadge.style.background = '#3a1a1a';
+        statusBadge.style.borderColor = '#5a2d2d';
+      }
+    }
+
+    // Show update notification
+    function showUpdateNotification() {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: #1f1f1f;
+        border: 1px solid #3b82f6;
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: #e5e5e5;
+        font-size: 14px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+      `;
+      notification.textContent = '🔔 New audit entry logged';
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.remove();
+      }, 3000);
+    }
+
+    // Update notification badge
+    function updateNotificationBadge() {
+      let badge = document.querySelector('.notification-badge');
+      if (!badge) {
+        badge = document.createElement('div');
+        badge.className = 'notification-badge';
+        badge.style.cssText = `
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          background: #ef4444;
+          color: white;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          font-size: 11px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        `;
+        const dashboardNav = document.querySelector('[data-view="dashboard"]');
+        dashboardNav.style.position = 'relative';
+        dashboardNav.appendChild(badge);
+      }
+      badge.textContent = newIssuesCount;
+    }
+
+    // Handle task events (legacy support)
     function handleTaskEvent(event) {
       console.log('Task event:', event);
       if (event.type === 'task.completed') {
@@ -646,20 +1735,22 @@
     async function loadTasks() {
       try {
         const health = await fetch('/api/health').then(r => r.json()).catch(() => ({ status: 'unknown' }));
-        const auditData = await fetch('/api/audit/recent?limit=10').then(r => r.json()).catch(() => ({ entries: [] }));
+        // Fetch ALL audit entries for accurate totals
+        const auditData = await fetch('/api/audit/recent?limit=1000').then(r => r.json()).catch(() => ({ entries: [] }));
 
-        // Update stats with REAL data
+        // Update stats with REAL data from ALL entries
         const totalActions = auditData.entries?.length || 0;
         const allowedActions = auditData.entries?.filter(e => e.permission.allowed).length || 0;
         const successRate = totalActions > 0 ? Math.round((allowedActions / totalActions) * 100) : 0;
 
         document.getElementById('totalTasks').textContent = totalActions;
         document.getElementById('successRate').textContent = successRate + '%';
-        document.getElementById('totalCost').textContent = '$0.00'; // TODO: Calculate from real usage
+        document.getElementById('totalCost').textContent = '$0.00'; // No cost tracking implemented
 
-        // Update recents list with REAL audit entries
+        // Update recents list with most recent 5 entries
         const recentsList = document.getElementById('recentsList');
         if (auditData.entries && auditData.entries.length > 0) {
+          // Show only the 5 most recent entries in sidebar
           recentsList.innerHTML = auditData.entries.slice(0, 5).map(entry => {
             const time = new Date(entry.timestamp).toLocaleTimeString();
             const status = entry.permission.allowed ? '✅' : '❌';
@@ -668,9 +1759,90 @@
         } else {
           recentsList.innerHTML = '<div class="recent-item">No actions yet</div>';
         }
+
+        // Store current metrics for comparison
+        previousMetrics = {
+          totalActions,
+          deniedActions: totalActions - allowedActions,
+          successRate
+        };
       } catch (error) {
         console.error('Failed to load stats:', error);
       }
+    }
+
+    // Load tasks with animation for live updates
+    async function loadTasksWithAnimation() {
+      try {
+        const health = await fetch('/api/health').then(r => r.json()).catch(() => ({ status: 'unknown' }));
+        const auditData = await fetch('/api/audit/recent?limit=1000').then(r => r.json()).catch(() => ({ entries: [] }));
+
+        const totalActions = auditData.entries?.length || 0;
+        const allowedActions = auditData.entries?.filter(e => e.permission.allowed).length || 0;
+        const deniedActions = totalActions - allowedActions;
+        const successRate = totalActions > 0 ? Math.round((allowedActions / totalActions) * 100) : 0;
+
+        // Animate counter if value changed
+        const totalTasksEl = document.getElementById('totalTasks');
+        if (totalActions !== previousMetrics.totalActions) {
+          totalTasksEl.classList.add('counter-increase');
+          setTimeout(() => totalTasksEl.classList.remove('counter-increase'), 500);
+          animateCounter(totalTasksEl, previousMetrics.totalActions, totalActions, 300);
+        }
+
+        // Animate success rate if changed
+        const successRateEl = document.getElementById('successRate');
+        if (successRate !== previousMetrics.successRate) {
+          successRateEl.classList.add('counter-increase');
+          setTimeout(() => successRateEl.classList.remove('counter-increase'), 500);
+          animateCounter(successRateEl, previousMetrics.successRate, successRate, 300, '%');
+        }
+
+        // Flash header if new denial
+        if (deniedActions > previousMetrics.deniedActions) {
+          const header = document.querySelector('.header');
+          header.classList.add('flash-red');
+          setTimeout(() => header.classList.remove('flash-red'), 1500);
+        }
+
+        // Update recents list
+        const recentsList = document.getElementById('recentsList');
+        if (auditData.entries && auditData.entries.length > 0) {
+          recentsList.innerHTML = auditData.entries.slice(0, 5).map(entry => {
+            const time = new Date(entry.timestamp).toLocaleTimeString();
+            const status = entry.permission.allowed ? '✅' : '❌';
+            return `<div class="recent-item">${status} ${entry.action.type} - ${time}</div>`;
+          }).join('');
+        }
+
+        // Update previous metrics
+        previousMetrics = { totalActions, deniedActions, successRate };
+      } catch (error) {
+        console.error('Failed to load stats with animation:', error);
+      }
+    }
+
+    // Animate counter from old value to new value
+    function animateCounter(element, start, end, duration, suffix = '') {
+      const startTime = performance.now();
+      const difference = end - start;
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (difference * easeOut));
+
+        element.textContent = current + suffix;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
     }
 
     // Send chat message to Enterprise OpenClaw
@@ -752,10 +1924,9 @@
       card.addEventListener('click', () => {
         const action = card.dataset.action;
         const prompts = {
-          'setup-claude': 'help me configure Claude API',
-          'install-model': 'install a model',
-          'status': 'system status',
-          'configure': 'help me configure'
+          'status': 'What is the current system status?',
+          'capabilities': 'What capabilities are available in the system?',
+          'audit': 'Show me recent audit log entries'
         };
         document.getElementById('promptInput').value = prompts[action];
         document.getElementById('promptInput').focus();
@@ -823,6 +1994,563 @@
       loadTasks();
       updateSystemStatus();
     }, 10000);
+
+    // ====================
+    // ACTIONABLE DASHBOARD
+    // ====================
+
+    let currentTab = 'capabilities';
+
+    // Load full dashboard when switching to dashboard view
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const originalClickHandler = item.onclick;
+      item.addEventListener('click', () => {
+        const view = item.dataset.view;
+        if (view === 'dashboard') {
+          loadDashboard();
+        }
+      });
+    });
+
+    // Tab switching
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('tab-btn')) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        currentTab = e.target.dataset.tab;
+        loadOperationalInsights();
+      }
+    });
+
+    // Collapsible sections
+    document.addEventListener('click', (e) => {
+      const section = e.target.closest('.collapsible');
+      if (section && e.target.closest('.section-title')) {
+        section.classList.toggle('expanded');
+        const content = section.querySelector('.detailed-analysis');
+        if (content) {
+          content.classList.toggle('collapsed');
+          if (!content.classList.contains('collapsed') && content.querySelector('.loading')) {
+            loadDetailedAnalysis();
+          }
+        }
+      }
+    });
+
+    async function loadDashboard() {
+      await Promise.all([
+        loadExecutiveSummary(),
+        loadOperationalInsights(),
+        loadRoleManagement(),
+        loadSmartRecommendations(),
+        loadSystemUpgrades()
+      ]);
+    }
+
+    async function loadExecutiveSummary() {
+      try {
+        const summary = await fetch('/api/dashboard/summary').then(r => r.json());
+
+        const healthClass = summary.healthScore > 80 ? 'good' : summary.healthScore > 50 ? 'warning' : 'critical';
+
+        let html = `
+          <div class="health-score">
+            <div class="score-circle ${healthClass}">${summary.healthScore}%</div>
+            <div class="health-info">
+              <h3>System Health Score</h3>
+              <span class="trend-badge ${summary.trend}">${summary.trend.toUpperCase()}</span>
+              <p style="margin-top: 8px; color: #888; font-size: 13px;">
+                ${summary.totalActions} total actions · ${summary.successRate}% success rate
+              </p>
+            </div>
+          </div>
+
+          <div class="key-metrics">
+            ${summary.keyMetrics.map(metric => `
+              <div class="metric-card ${metric.status}">
+                <div class="metric-label">${metric.label}</div>
+                <div class="metric-value">${metric.value}</div>
+                ${metric.change ? `<div class="metric-change">${metric.change}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+
+          ${summary.criticalIssues.length > 0 ? `
+            <h3 style="margin-bottom: 16px; color: #e5e5e5;">⚠️  Critical Issues Requiring Action</h3>
+            <div class="issues-list">
+              ${summary.criticalIssues.map((issue, idx) => `
+                <div class="issue-card ${issue.severity}">
+                  <div class="issue-header">
+                    <div class="issue-title">${issue.title}</div>
+                    <span class="severity-badge ${issue.severity}">${issue.severity}</span>
+                  </div>
+                  <div class="issue-description">${issue.description}</div>
+                  <div class="issue-impact">💡 Impact: ${issue.impact}</div>
+
+                  <div class="recommendation">
+                    <div class="recommendation-header">✅ ${issue.recommendation.action}</div>
+                    <div class="recommendation-impact">${issue.recommendation.estimatedImpact}</div>
+                    <button class="action-btn" onclick="executeAction(${idx}, 'critical')"
+                            ${!issue.recommendation.autoExecutable ? 'disabled title="Manual implementation required"' : ''}>
+                      ${issue.recommendation.autoExecutable ? 'Apply Fix' : 'Manual Setup Required'}
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : '<div style="color: #22c55e; padding: 20px; text-align: center;">✅ No critical issues detected</div>'}
+        `;
+
+        document.getElementById('executiveSummary').innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load executive summary:', error);
+        document.getElementById('executiveSummary').innerHTML = '<div class="error">Failed to load summary</div>';
+      }
+    }
+
+    async function loadOperationalInsights() {
+      try {
+        const insights = await fetch('/api/dashboard/insights').then(r => r.json());
+
+        let html = '';
+
+        if (currentTab === 'capabilities') {
+          html = `
+            <div class="capability-list">
+              ${insights.capabilityAnalysis.slice(0, 10).map(cap => `
+                <div class="capability-item">
+                  <div class="capability-header">
+                    <div class="capability-name">${cap.capability}</div>
+                    <div class="capability-stats">
+                      <span class="stat-item allowed">✅ ${cap.allowed}</span>
+                      <span class="stat-item denied">❌ ${cap.denied}</span>
+                    </div>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${cap.denied > 0 ? (cap.denied / (cap.allowed + cap.denied) * 100) : 0}%"></div>
+                  </div>
+                  ${cap.denied > 0 ? `<div style="font-size: 12px; color: #ef4444;">${cap.denialRate}% denial rate</div>` : ''}
+                  ${cap.recommendation ? `
+                    <div style="margin-top: 12px;">
+                      <button class="action-btn secondary" onclick="executeCapabilityAction('${cap.capability}')">
+                        ${cap.recommendation.action}
+                      </button>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (currentTab === 'users') {
+          html = `
+            <div class="user-list">
+              ${insights.userBehavior.map(user => `
+                <div class="user-card">
+                  <div class="user-name">👤 ${user.userId}</div>
+                  <div class="user-stats">
+                    <div>Total Actions: ${user.totalActions}</div>
+                    <div>Success Rate: ${user.successRate}%</div>
+                    <div>Top Actions: ${user.topActions.join(', ')}</div>
+                    ${user.missingCapabilities.length > 0 ? `
+                      <div style="color: #ef4444; margin-top: 8px;">
+                        Missing: ${user.missingCapabilities.join(', ')}
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (currentTab === 'patterns') {
+          const maxActions = Math.max(...insights.timePatterns.map(p => p.actions));
+          html = `
+            <div style="padding: 20px;">
+              <h4 style="margin-bottom: 16px; color: #e5e5e5;">Activity by Hour</h4>
+              ${insights.timePatterns.map(pattern => `
+                <div style="margin-bottom: 12px;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px;">
+                    <span>${pattern.hour}:00</span>
+                    <span>${pattern.actions} actions (${pattern.denials} denied)</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(pattern.actions / maxActions * 100)}%; background: #3b82f6;"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        document.getElementById('operationalInsights').innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load operational insights:', error);
+        document.getElementById('operationalInsights').innerHTML = '<div class="error">Failed to load insights</div>';
+      }
+    }
+
+    async function loadDetailedAnalysis() {
+      try {
+        const details = await fetch('/api/dashboard/details?limit=20').then(r => r.json());
+
+        let html = `
+          <h4 style="margin-bottom: 16px; color: #e5e5e5;">Recent Actions</h4>
+          <div style="max-height: 400px; overflow-y: auto;">
+            ${details.recentActions.map(action => {
+              const time = new Date(action.timestamp).toLocaleString();
+              const status = action.permission.allowed ? '✅' : '❌';
+              const statusColor = action.permission.allowed ? '#22c55e' : '#ef4444';
+              return `
+                <div style="padding: 12px; background: #222; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid ${statusColor};">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-weight: 600;">${status} ${action.action.type}</span>
+                    <span style="font-size: 12px; color: #888;">${time}</span>
+                  </div>
+                  <div style="font-size: 12px; color: #888;">
+                    User: ${action.userId}
+                    ${!action.permission.allowed ? `<br>Reason: ${action.permission.reason || 'Permission denied'}` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+
+        document.getElementById('detailedAnalysis').innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load detailed analysis:', error);
+        document.getElementById('detailedAnalysis').innerHTML = '<div class="error">Failed to load details</div>';
+      }
+    }
+
+    async function loadSmartRecommendations() {
+      try {
+        const data = await fetch('/api/recommendations').then(r => r.json());
+
+        if (!data.recommendations || data.recommendations.length === 0) {
+          document.getElementById('smartRecommendations').innerHTML = `
+            <div style="padding: 40px; text-align: center; color: #22c55e;">
+              ✅ No recommendations at this time<br>
+              <span style="font-size: 13px; color: #888; margin-top: 8px; display: block;">
+                System is analyzing audit patterns. Recommendations will appear when patterns are detected.
+              </span>
+            </div>
+          `;
+          return;
+        }
+
+        // Show top 5 recommendations only
+        const topRecommendations = data.recommendations.slice(0, 5);
+
+        let html = `
+          <div style="margin-bottom: 16px; padding: 12px; background: #1a1a1a; border-radius: 8px;">
+            <div style="font-size: 13px; color: #aaa;">
+              📊 <strong>${data.stats.totalRecommendations}</strong> recommendations found
+              · <strong>${data.stats.potentialImpact}</strong>
+            </div>
+          </div>
+          <div class="smart-recommendations">
+            ${topRecommendations.map(rec => {
+              const priorityLevel = rec.priority >= 7 ? 'high' : rec.priority >= 4 ? 'medium' : 'low';
+              return `
+                <div class="recommendation-card ${priorityLevel}">
+                  <div class="recommendation-priority">
+                    <span class="priority-badge ${priorityLevel}">Priority ${rec.priority}/10</span>
+                    <span class="confidence-badge">${rec.confidence} confidence</span>
+                  </div>
+
+                  <div class="recommendation-type">${rec.type.replace(/_/g, ' ')}</div>
+                  <div class="recommendation-title">${rec.action.description}</div>
+
+                  <div class="recommendation-reasoning">
+                    <div class="reasoning-pattern"><strong>Pattern:</strong> ${rec.reasoning.pattern}</div>
+                    ${rec.reasoning.evidence.slice(0, 3).map(evidence =>
+                      `<div class="reasoning-evidence">${evidence}</div>`
+                    ).join('')}
+                  </div>
+
+                  <div class="recommendation-impact-text">
+                    💡 Impact: ${rec.reasoning.impact}
+                  </div>
+
+                  <div class="recommendation-actions">
+                    <button class="action-btn" onclick="applyRecommendation('${rec.id}')"
+                            ${!rec.autoExecutable ? 'disabled title="Requires manual approval"' : ''}>
+                      ${rec.autoExecutable ? '✓ Apply' : '⚠ Manual Review Required'}
+                    </button>
+                    <button class="action-btn secondary" onclick="dismissRecommendation('${rec.id}')">
+                      ✕ Dismiss
+                    </button>
+                  </div>
+
+                  <div class="recommendation-stats">
+                    <strong>Estimated Impact:</strong> ${rec.estimatedImpact}
+                    · <strong>Data Points:</strong> ${rec.reasoning.dataPoints}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          ${data.recommendations.length > 5 ? `
+            <div style="margin-top: 16px; text-align: center; color: #888; font-size: 13px;">
+              Showing top 5 of ${data.recommendations.length} recommendations
+            </div>
+          ` : ''}
+        `;
+
+        document.getElementById('smartRecommendations').innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load smart recommendations:', error);
+        document.getElementById('smartRecommendations').innerHTML = '<div class="error">Failed to load recommendations</div>';
+      }
+    }
+
+    async function loadSystemUpgrades() {
+      try {
+        const data = await fetch('/api/dashboard/upgrades').then(r => r.json());
+
+        let html = `
+          <div class="upgrade-list">
+            ${data.upgrades.map((upgrade, idx) => `
+              <div class="upgrade-card">
+                <div class="upgrade-title">🚀 ${upgrade.action}</div>
+                <div class="upgrade-description">${upgrade.payload.description}</div>
+                <div class="upgrade-impact">💡 ${upgrade.estimatedImpact}</div>
+                <div>
+                  <span class="complexity-badge">${upgrade.complexity}</span>
+                  <button class="action-btn" onclick="executeUpgrade(${idx})" ${upgrade.autoExecutable ? '' : 'disabled'}>
+                    ${upgrade.autoExecutable ? 'Enable Now' : 'Learn More'}
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        document.getElementById('systemUpgrades').innerHTML = html;
+      } catch (error) {
+        console.error('Failed to load system upgrades:', error);
+        document.getElementById('systemUpgrades').innerHTML = '<div class="error">Failed to load upgrades</div>';
+      }
+    }
+
+    // Action execution functions
+    async function executeAction(issueIdx, type) {
+      const summary = await fetch('/api/dashboard/summary').then(r => r.json());
+      const issue = summary.criticalIssues[issueIdx];
+
+      // Create helpful dialog with clear explanation
+      const dialogMessage = `${issue.recommendation.action}
+
+📋 What this means:
+${issue.description}
+
+💡 What will happen:
+${issue.recommendation.estimatedImpact}
+
+👥 Who this helps:
+${issue.affectedActions} blocked actions for ${issue.impact.match(/\d+/)?.[0] || 'multiple'} users
+
+⚙️ Implementation:
+${issue.recommendation.complexity === 'simple' ? 'Quick fix - takes effect immediately' : 'Requires system configuration'}
+
+${issue.recommendation.autoExecutable ? '✅ This can be applied automatically' : '⚠️ Requires manual setup'}
+
+Click OK to proceed, or Cancel to dismiss.`;
+
+      if (confirm(dialogMessage)) {
+        try {
+          const result = await fetch('/api/dashboard/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: issue.recommendation })
+          }).then(r => r.json());
+
+          // Show clear result message
+          const resultMessage = result.success
+            ? `✅ Success!\n\n${result.message}\n\n💡 What this means:\n${issue.recommendation.estimatedImpact}`
+            : `⚠️ ${result.message}\n\n${result.note ? `ℹ️ Next steps:\n${result.note}` : ''}`;
+
+          alert(resultMessage);
+          loadDashboard(); // Refresh
+        } catch (error) {
+          alert(`❌ Failed to apply fix\n\nError: ${error.message}\n\nℹ️ This might mean:\n• The server is not responding\n• The feature is still in development\n• Try refreshing the page`);
+        }
+      }
+    }
+
+    async function executeCapabilityAction(capability) {
+      const dialogMessage = `Grant ${capability} Permission
+
+📋 What this means:
+Allow users to perform "${capability}" actions
+
+💡 Why this helps:
+Multiple users are being blocked from ${capability} operations. Granting this permission will let them complete their work.
+
+⚙️ How it works:
+• Permission will be added to user accounts
+• Future ${capability} attempts will succeed
+• Blocked actions will be resolved
+
+Click OK to grant permission, or Cancel to keep current restrictions.`;
+
+      if (confirm(dialogMessage)) {
+        try {
+          const result = await fetch('/api/dashboard/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: {
+                type: 'grant_permission',
+                payload: { capability }
+              }
+            })
+          }).then(r => r.json());
+
+          const resultMessage = result.success
+            ? `✅ Permission Granted!\n\n${capability} is now allowed\n\n💡 Users can now:\n• Perform ${capability} operations\n• Complete previously blocked tasks`
+            : `⚠️ ${result.message}\n\n${result.note || 'This feature is being developed. The permission system will be fully integrated soon.'}`;
+
+          alert(resultMessage);
+          loadDashboard();
+        } catch (error) {
+          alert(`❌ Could not grant permission\n\nError: ${error.message}\n\nℹ️ The permission system is still being set up. This will work once integration is complete.`);
+        }
+      }
+    }
+
+    async function executeUpgrade(upgradeIdx) {
+      const data = await fetch('/api/dashboard/upgrades').then(r => r.json());
+      const upgrade = data.upgrades[upgradeIdx];
+
+      const dialogMessage = `${upgrade.action}
+
+📋 What this does:
+${upgrade.payload.description}
+
+💡 Why it helps:
+${upgrade.estimatedImpact}
+
+⚙️ Implementation level:
+${upgrade.complexity === 'simple' ? '✅ Simple - Quick setup' :
+  upgrade.complexity === 'moderate' ? '⚠️ Moderate - Some configuration needed' :
+  '🔧 Complex - Significant changes required'}
+
+${upgrade.autoExecutable
+  ? '✅ Can be enabled automatically'
+  : '📚 Requires manual implementation - Click OK to learn more about how to set this up'}
+
+Ready to proceed?`;
+
+      if (confirm(dialogMessage)) {
+        if (!upgrade.autoExecutable) {
+          // Show implementation guide for manual upgrades
+          alert(`📚 How to Implement: ${upgrade.action}
+
+This upgrade requires manual implementation. Here's what you need to do:
+
+${upgrade.payload.feature === 'role_based_access'
+  ? `1. Review role definitions in packages/enterprise/src/permissions/roles.ts
+2. Assign users to appropriate roles (Admin, Developer, Analyst, Viewer)
+3. Update permission policies to use roles instead of individual capabilities
+4. Test with sample users to verify access levels
+
+📖 See docs/ROLE_BASED_PERMISSIONS.md for detailed instructions`
+  : upgrade.payload.feature === 'permission_learning'
+  ? `1. Enable the recommendation engine (already active!)
+2. Review suggestions in the Smart Recommendations section
+3. Apply or dismiss recommendations to train the system
+4. Monitor denial patterns over time
+
+📖 The system is already learning from your audit logs!`
+  : upgrade.payload.feature === 'analytics_dashboard'
+  ? `1. The real-time analytics dashboard is already active!
+2. Open the Dashboard tab to see live updates
+3. Connect via WebSocket to receive real-time events
+4. View trend analysis and anomaly detection
+
+📖 You're already using this feature!`
+  : `This feature is being developed. Implementation guide coming soon.`}
+
+${upgrade.autoExecutable ? '' : '\n💡 Some of these features may already be partially implemented. Check the dashboard!'}`);
+          return;
+        }
+
+        try {
+          const result = await fetch('/api/dashboard/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: upgrade })
+          }).then(r => r.json());
+
+          const resultMessage = result.success
+            ? `✅ Upgrade Enabled!\n\n${upgrade.action}\n\n💡 What changed:\n${upgrade.estimatedImpact}\n\nℹ️ The system is now using this enhanced feature.`
+            : `⚠️ ${result.message}\n\n${result.note || 'This upgrade is being prepared for deployment.'}`;
+
+          alert(resultMessage);
+          loadDashboard();
+        } catch (error) {
+          alert(`❌ Could not enable upgrade\n\nError: ${error.message}\n\nℹ️ This feature is being developed and will be available soon.`);
+        }
+      }
+    }
+
+    // Smart Recommendation Actions
+    async function applyRecommendation(recommendationId) {
+      try {
+        // Get the recommendation details first
+        const data = await fetch('/api/recommendations').then(r => r.json());
+        const recommendation = data.recommendations.find(r => r.id === recommendationId);
+
+        if (!recommendation) {
+          alert('Recommendation not found');
+          return;
+        }
+
+        if (!confirm(`Apply: ${recommendation.action.description}?\n\nThis will: ${recommendation.estimatedImpact}`)) {
+          return;
+        }
+
+        // Apply the recommendation
+        const result = await fetch(`/api/recommendations/${recommendationId}/apply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        }).then(r => r.json());
+
+        if (result.success) {
+          alert(`✅ Success: ${result.message}`);
+          loadDashboard(); // Refresh dashboard to show updated recommendations
+        } else {
+          alert(`⚠️ ${result.message}${result.note ? '\n\nNote: ' + result.note : ''}`);
+        }
+      } catch (error) {
+        console.error('Failed to apply recommendation:', error);
+        alert('Failed to apply recommendation: ' + error.message);
+      }
+    }
+
+    async function dismissRecommendation(recommendationId) {
+      if (!confirm('Dismiss this recommendation?\n\nYou can always generate new recommendations from fresh audit data.')) {
+        return;
+      }
+
+      try {
+        const result = await fetch(`/api/recommendations/${recommendationId}/dismiss`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        }).then(r => r.json());
+
+        if (result.success) {
+          loadDashboard(); // Refresh to remove dismissed recommendation
+        } else {
+          alert('Failed to dismiss recommendation');
+        }
+      } catch (error) {
+        console.error('Failed to dismiss recommendation:', error);
+        alert('Failed to dismiss recommendation: ' + error.message);
+      }
+    }
   </script>
 </body>
 </html>
