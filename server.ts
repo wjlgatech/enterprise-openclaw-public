@@ -37,28 +37,39 @@ async function initializeSystem() {
     await knowledgeGraph.initialize();
     logger.info('✓ Knowledge Graph initialized');
 
-    // Add initial knowledge
+    // Add initial knowledge (only if not already present)
     logger.info('📝 Loading initial knowledge...');
-    await knowledgeGraph.addNode({
-      id: 'openclaw_intro',
-      type: 'concept',
-      content: 'Enterprise OpenClaw is a GenAI-native multi-agent platform with self-improvement capabilities. It features knowledge graphs, RAG systems, and can run 100% locally.',
-      metadata: { category: 'system', importance: 'high' }
-    });
 
-    await knowledgeGraph.addNode({
-      id: 'openclaw_features',
-      type: 'concept',
-      content: 'Key features include: knowledge graph storage, vector search with LanceDB, basic and advanced RAG, multi-agent orchestration, local AI support, enterprise security with PII detection and audit logging.',
-      metadata: { category: 'features', importance: 'high' }
-    });
+    const initialNodes = [
+      {
+        id: 'openclaw_intro',
+        type: 'concept',
+        content: 'Enterprise OpenClaw is a GenAI-native multi-agent platform with self-improvement capabilities. It features knowledge graphs, RAG systems, and can run 100% locally.',
+        metadata: { category: 'system', importance: 'high' }
+      },
+      {
+        id: 'openclaw_features',
+        type: 'concept',
+        content: 'Key features include: knowledge graph storage, vector search with LanceDB, basic and advanced RAG, multi-agent orchestration, local AI support, enterprise security with PII detection and audit logging.',
+        metadata: { category: 'features', importance: 'high' }
+      },
+      {
+        id: 'openclaw_privacy',
+        type: 'concept',
+        content: 'Enterprise OpenClaw can run 100% locally on your machine, ensuring complete privacy. No data leaves your device unless you explicitly configure cloud AI integrations.',
+        metadata: { category: 'security', importance: 'high' }
+      }
+    ];
 
-    await knowledgeGraph.addNode({
-      id: 'openclaw_privacy',
-      type: 'concept',
-      content: 'Enterprise OpenClaw can run 100% locally on your machine, ensuring complete privacy. No data leaves your device unless you explicitly configure cloud AI integrations.',
-      metadata: { category: 'security', importance: 'high' }
-    });
+    for (const node of initialNodes) {
+      const existing = await knowledgeGraph.getNode(node.id);
+      if (!existing) {
+        await knowledgeGraph.addNode(node);
+        logger.info(`✓ Added node: ${node.id}`);
+      } else {
+        logger.info(`→ Node already exists: ${node.id}`);
+      }
+    }
 
     isInitialized = true;
     logger.info('✅ System initialization complete!');
