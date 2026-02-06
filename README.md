@@ -1,6 +1,10 @@
-# OpenClaw Pro (Community Edition)
+<div align="center">
+  <img src="./public/images/openclaw-pro-icon.png" alt="OpenClaw Pro" width="200" />
 
-## Production-Ready AI Knowledge Systems - Without the 6-Month Build
+  # OpenClaw Pro (Community Edition)
+
+  ## Production-Ready AI Knowledge Systems - Without the 6-Month Build
+</div>
 
 **The Problem:** [OpenClaw](https://github.com/openclaw/openclaw) is a powerful framework, but going from framework to production takes 3-6 months of engineering work: building UI, adding security, implementing multi-user, optimizing for scale.
 
